@@ -7,6 +7,8 @@ Created on Thu Nov 30 10:29:35 2017
 
 # test
 
+# Je rajoute quelques lignes de commentaires
+
 import numpy as np
 import matplotlib.pylab as plt
 import scipy
