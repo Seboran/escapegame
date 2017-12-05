@@ -19,12 +19,6 @@ plt.close("all")
 numero_agent = 1
 numero_porte = -1
 
-
-
-class Couple:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
         
         
 class Agent:
@@ -39,8 +33,7 @@ class Porte:
     def __init__(self, positionGauche, positionDroite):
         self.positionGauche = positionGauche
         self.positionDroite = positionDroite
-        self.positionCentre=Couple(0.5*(self.positionDroite.x+self.positionGauche.x),
-                                   0.5*(self.positionDroite.y+self.positionGauche.y))
+        self.positionCentre=Couple(0.5*(self.positionDroite+self.positionGauche)
         
 class Obstacle:
     def __init__(self, sommets):
@@ -72,8 +65,8 @@ class Environnement:
             2;
             
         for agent in agents:
-            nx = meter_to_int(agent.position.x, Nx, Lx)
-            ny = meter_to_int(agent.position.y, Ny, Ly)
+            nx = meter_to_int(agent.position[0], Nx, Lx)
+            ny = meter_to_int(agent.position[1], Ny, Ly)
             
             self.grille.tab[nx][ny] = numero_agent
             
@@ -100,8 +93,7 @@ class Environnement:
             
         def maj_position_agents():
             for agent in agents:
-                agent.position.x += self.dt * agent.vitesse[0]
-                agent.position.y += self.dt * agent.vitesse[1]
+                agent.position += self.dt * agent.vitesse
                 
         maj_vitesse_agents()
         maj_position_agents()
@@ -113,8 +105,8 @@ class Environnement:
         axe.set_xlim(0, self.Lx)
         axe.set_ylim(0, self.Ly)
         for agent in self.agents:
-            x.append(agent.position.x)
-            y.append(agent.position.y)
+            x.append(agent.position[0])
+            y.append(agent.position[1])
         
         axe.scatter(x, y)
         for obstacle in self.obstacles:
@@ -122,33 +114,56 @@ class Environnement:
             x = []
             y = []
             for sommet in obstacle.sommets:
-                x.append(sommet.x)
-                y.append(sommet.y)
+                x.append(sommet[0])
+                y.append(sommet[1])
                 
             axe.plot(x, y, color = '#000000')
             
         for porte in self.portes:
             pos_porte = porte.positionCentre
-            plt.plot(pos_porte.x, pos_porte.y, 'x')
+            plt.plot(pos_porte[0], pos_porte[1], 'x')
     
+
 def fintention(agent, portes):
+
+# Intention naturellle pour un agent d'aller vers la porte la plus proche
+
     
-    #On cherche la porte la plus proche
-    
-    vect=[portes[0].positionCentre.x-agent.position.x,portes[0].positionCentre.y-agent.position.y]
+    vect=[portes[0].positionCentre-agent.position[0]]
     vect=vect/np.linalg.norm(vect)
     
     for porte in portes[1:-1]:
         
-        vect_test=[porte.positionCentre.x-agent.position.x,porte.positionCentre.y-agent.position.y]
+        vect_test=[portes.positionCentre-agent.position[0]]
         vect_test=vect_test/np.linalg.norm(vect_test)
         
         if np.linalg.norm(vect_test) < np.linalg.norm(vect):
             
             vect = vect_test
         
-    return vect
+    return agent.vitesseBase*vect
     
+def Dpotentiel(r,sigma,epsilon):
+#La dérivée du potentiel de répulsion
+    
+    if r<2**(1/6)*sigma:
+        
+        return 4*epsilon*(-12*(sigma/r)**12/r+6*(sigma/r)**6/r)
+    
+    else:
+        return 0
+    
+def fagent(agent1,agent2):
+#Force de répulsion entre deux agents
+
+    sigma=agent1.sigma
+    epsilon=agent1.epsilon
+    r=np.linalg.norme(agent1.position-agent2.position)
+    
+    return -Dpotentiel(r,sigma,epsilon)
+    
+    
+
 
 # Premier exemple
 
@@ -160,12 +175,6 @@ dt = 1.
 
 marie = Agent(Couple(5., 5.), 2., 1., 1.)
 nirina = Agent(Couple(7., 2.), 2., 2., 2.)
-
-            
-
-
-      
-
 
 
 # Murs d'exemple
@@ -200,6 +209,7 @@ for i in range(10):
     salleTest.maj()
     salleTest.afficher(fig, ax)
     time.sleep(1)
+
 
 
 
