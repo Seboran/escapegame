@@ -17,7 +17,7 @@ plt.close("all")
 
 numero_agent = 1
 numero_porte = -1
-
+#commentaire
 class Couple:
     def __init__(self, x, y):
         self.x = x
@@ -117,6 +117,7 @@ salleTest.afficher(fig, ax)
         
         
 
+# Ceci est la contribution de Nirina
 
 
 
@@ -124,8 +125,7 @@ salleTest.afficher(fig, ax)
 
 
 
-
-
+#commentaire
 
 
 
