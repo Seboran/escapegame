@@ -91,7 +91,15 @@ class Environnement:
         
         axe.scatter(x, y)
         for obstacle in self.obstacles:
-            axe.plot(obstacle.sommets) # TODO
+            x = []
+            y = []
+            for sommet in obstacle.sommets:
+                x.append(sommet.x)
+                y.append(sommet.y)
+                
+            axe.plot(x, y, color = '#000000')
+            
+        
             
 
 
