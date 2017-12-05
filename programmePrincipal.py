@@ -106,7 +106,6 @@ class Environnement:
             
 
 
-=======
             axe.plot(obstacle.sommets) # TODO
     
 def fintention(agent):
