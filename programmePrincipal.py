@@ -95,7 +95,7 @@ class Environnement:
             
         def maj_position_agents():
             for agent in agents:
-                agent.position += self.dt * agent.vitesse
+                agent.position = agent.position + self.dt * agent.vitesse
                 
         maj_vitesse_agents()
         maj_position_agents()
@@ -131,19 +131,19 @@ def fintention(agent, portes):
 # Intention naturellle pour un agent d'aller vers la porte la plus proche
 
     
-    vect=[portes[0].positionCentre-agent.position[0]]
+    vect=portes[0].positionCentre-agent.position
     vect=vect/np.linalg.norm(vect)
     
     for porte in portes[1:-1]:
         
-        vect_test=[portes.positionCentre-agent.position[0]]
+        vect_test=portes.positionCentre-agent.position
         vect_test=vect_test/np.linalg.norm(vect_test)
         
         if np.linalg.norm(vect_test) < np.linalg.norm(vect):
             
             vect = vect_test
         
-    return agent.vitesseBase*vect
+    return agent.vitesseBase * np.array(vect)
     
 def Dpotentiel(r,sigma,epsilon):
 #La dérivée du potentiel de répulsion
@@ -173,10 +173,10 @@ Lx = 10.
 Ly = 15.
 Nx = 400
 Ny = 400
-dt = 1.
+dt = 0.1
 
-marie = Agent([5,5], 2., 1., 1.)
-nirina = Agent([7,2], 2., 2., 2.)
+marie = Agent(np.array([5,5]), 2., 1., 1.)
+nirina = Agent(np.array([7,2]), 2., 2., 2.)
 
 
 # Murs d'exemple
@@ -210,7 +210,7 @@ salleTest.afficher(fig, ax)
 for i in range(10):
     salleTest.maj()
     salleTest.afficher(fig, ax)
-    time.sleep(1)
+    
 
 
 
