@@ -11,6 +11,7 @@ Created on Thu Nov 30 10:29:35 2017
 
 import numpy as np
 import matplotlib.pylab as plt
+import time
 import scipy
 
 plt.close("all")
@@ -25,12 +26,13 @@ class Couple:
         self.x = x
         self.y = y
         
+        
 class Agent:
     def __init__(self, positionBase, vitesseBase, sigma, epsilon):
         self.vitesseBase = vitesseBase
         self.sigma = sigma
         self.epsilon = epsilon
-        self.vitesse = 0
+        self.vitesse = [0, 0]
         self.position = positionBase
         
 class Porte:
@@ -51,7 +53,7 @@ class Grille:
     
         
 class Environnement:
-    def __init__(self, Lx, Ly, Nx, Ny, obstacles, agents, portes):
+    def __init__(self, Lx, Ly, Nx, Ny, dt, obstacles, agents, portes):
         self.obstacles = obstacles
         self.agents = agents
         self.portes = portes
@@ -59,7 +61,7 @@ class Environnement:
         self.Ly = Ly
         self.Nx = Nx
         self.Ny = Ny
-        
+        self.dt = dt
         self.grille = Grille(Nx, Ny)
         
         def meter_to_int(x, N, L):
@@ -79,7 +81,30 @@ class Environnement:
             #Todo
             
             2;
+            
+    
+    
+    
+    
+            
+    def maj(self):
+        def maj_vitesse_agents():
         
+            def maj_vitesse_agent_intention(agent):
+                force = fintention(agent, self.portes)
+                agent.vitesse += force
+            
+            for agent in self.agents:
+                agent.vitesse = [0, 0]
+                maj_vitesse_agent_intention(agent)
+            
+        def maj_position_agents():
+            for agent in agents:
+                agent.position.x += self.dt * agent.vitesse[0]
+                agent.position.y += self.dt * agent.vitesse[1]
+                
+        maj_vitesse_agents()
+        maj_position_agents()
         
         
     def afficher(self, figure, axe):
@@ -106,7 +131,7 @@ class Environnement:
             pos_porte = porte.positionCentre
             plt.plot(pos_porte.x, pos_porte.y, 'x')
     
-def fintention(agent):
+def fintention(agent, portes):
     
     #On cherche la porte la plus proche
     
@@ -131,12 +156,13 @@ Lx = 10.
 Ly = 15.
 Nx = 400
 Ny = 400
+dt = 1.
 
 marie = Agent(Couple(5., 5.), 2., 1., 1.)
 nirina = Agent(Couple(7., 2.), 2., 2., 2.)
 
             
-TEST=fintention(marie)
+
 
       
 
@@ -159,17 +185,21 @@ porte = Porte(Couple(4., 1.), Couple(6., 1.))
 agents = [marie, nirina]
 portes = [porte]
 
+TEST=fintention(marie, portes)
 
-salleTest = Environnement(Lx, Ly, Nx, Ny, obstacles, agents, portes)
+salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
 
 
 fig, ax = plt.subplots(1,1)
 
-
+plt.show()
 
 salleTest.afficher(fig, ax) 
 
-
+for i in range(10):
+    salleTest.maj()
+    salleTest.afficher(fig, ax)
+    time.sleep(1)
 
 
 
