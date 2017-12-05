@@ -102,11 +102,9 @@ class Environnement:
                 
             axe.plot(x, y, color = '#000000')
             
-        
-            
-
-
-            axe.plot(obstacle.sommets) # TODO
+        for porte in self.portes:
+            pos_porte = porte.positionCentre
+            plt.plot(pos_porte.x, pos_porte.y, 'x')
     
 def fintention(agent):
     
@@ -120,7 +118,7 @@ def fintention(agent):
         vect_test=[positionCentre.portes[0].x-agent.position.x,positionCentre.portes[0].y-agent.position.y]
         vect_test=vect_test/np.linalg.norm(vect_test)
         
-        if np.linalg.norm(vect_test)>
+        #if np.linalg.norm(vect_test)>
         
     return 
     
