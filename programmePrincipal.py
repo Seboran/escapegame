@@ -102,13 +102,9 @@ class Environnement:
                 
             axe.plot(x, y, color = '#000000')
             
-
-            axe.plot(obstacle.sommets) # TODO
-
         for porte in self.portes:
             pos_porte = porte.positionCentre
             plt.plot(pos_porte.x, pos_porte.y, 'x')
-
     
 def fintention(agent):
     
@@ -136,23 +132,9 @@ Ly = 15.
 Nx = 400
 Ny = 400
 
-
-
 marie = Agent(Couple(5., 5.), 2., 1., 1.)
 nirina = Agent(Couple(7., 2.), 2., 2., 2.)
 
-porte = Porte(Couple(0., 2.), Couple(0., 3.))
-
-agents = [marie, nirina]
-portes = [porte]
-obstacles = []
-
-salleTest = Environnement(Lx, Ly, Nx, Ny, obstacles, agents, portes)
-
-
-fig, ax = plt.subplots(1,1)
-
-salleTest.afficher(fig, ax)
             
 TEST=fintention(marie)
 
