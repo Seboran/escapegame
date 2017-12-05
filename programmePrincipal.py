@@ -97,17 +97,19 @@ def fintention(agent):
     
     #On cherche la porte la plus proche
     
-    vect=[positionCentre.portes[0].x-agent.position.x,positionCentre.portes[0].y-agent.position.y]
+    vect=[portes[0].positionCentre.x-agent.position.x,portes[0].positionCentre.y-agent.position.y]
     vect=vect/np.linalg.norm(vect)
     
     for porte in portes[1:-1]:
         
-        vect_test=[positionCentre.portes[0].x-agent.position.x,positionCentre.portes[0].y-agent.position.y]
+        vect_test=[porte.positionCentre.x-agent.position.x,porte.positionCentre.y-agent.position.y]
         vect_test=vect_test/np.linalg.norm(vect_test)
         
-        if np.linalg.norm(vect_test)>
+        if np.linalg.norm(vect_test)<np.linalg.norm(vect):
+            
+            vect=vect_test
         
-    return 
+    return vect
     
 # Premier exemple
 
@@ -131,7 +133,7 @@ fig, ax = plt.subplots(1,1)
 
 salleTest.afficher(fig, ax)
             
-
+TEST=fintention(marie)
 
         
 
