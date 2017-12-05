@@ -114,20 +114,12 @@ fig, ax = plt.subplots(1,1)
 
 salleTest.afficher(fig, ax)
             
+
+##
         
         
 
 
-
-
-
-
-
-
-
-
-
-# PUUUUUUTE
 
 
 
