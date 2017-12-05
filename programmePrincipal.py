@@ -18,6 +18,8 @@ plt.close("all")
 numero_agent = 1
 numero_porte = -1
 
+
+
 class Couple:
     def __init__(self, x, y):
         self.x = x
@@ -91,6 +93,20 @@ class Environnement:
         
         axe.scatter(x, y)
         for obstacle in self.obstacles:
+
+            x = []
+            y = []
+            for sommet in obstacle.sommets:
+                x.append(sommet.x)
+                y.append(sommet.y)
+                
+            axe.plot(x, y, color = '#000000')
+            
+        
+            
+
+
+=======
             axe.plot(obstacle.sommets) # TODO
     
 def fintention(agent):
@@ -111,6 +127,7 @@ def fintention(agent):
         
     return vect
     
+
 # Premier exemple
 
 Lx = 10.
@@ -120,6 +137,7 @@ Ny = 400
 
 marie = Agent(Couple(5., 5.), 2., 1., 1.)
 nirina = Agent(Couple(7., 2.), 2., 2., 2.)
+
 porte = Porte(Couple(0., 2.), Couple(0., 3.))
 
 agents = [marie, nirina]
@@ -135,7 +153,36 @@ salleTest.afficher(fig, ax)
             
 TEST=fintention(marie)
 
-        
+      
+
+
+
+# Murs d'exemple
+
+mur0 = Obstacle([Couple(4., 1.), Couple(1., 1.)])
+mur1 = Obstacle([Couple(1., 1.), Couple(1., 14.)])
+mur2 = Obstacle([Couple(1., 14.), Couple(9., 14.)])
+mur3 = Obstacle([Couple(9., 14.), Couple(9., 1.)])
+mur4 = Obstacle([Couple(9., 1.), Couple(6., 1.)])
+
+
+
+obstacles = [mur0, mur1, mur2, mur3, mur4]
+
+porte = Porte(Couple(4., 1.), Couple(6., 1.))
+
+agents = [marie, nirina]
+portes = [porte]
+
+
+salleTest = Environnement(Lx, Ly, Nx, Ny, obstacles, agents, portes)
+
+
+fig, ax = plt.subplots(1,1)
+
+
+
+salleTest.afficher(fig, ax) 
 
 
 
@@ -152,20 +199,3 @@ TEST=fintention(marie)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
