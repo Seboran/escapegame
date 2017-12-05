@@ -33,7 +33,9 @@ class Porte:
     def __init__(self, positionGauche, positionDroite):
         self.positionGauche = positionGauche
         self.positionDroite = positionDroite
+
         self.positionCentre= 0.5*(self.positionDroite+self.positionGauche)
+
         
 class Obstacle:
     def __init__(self, sommets):
@@ -173,23 +175,23 @@ Nx = 400
 Ny = 400
 dt = 1.
 
-marie = Agent(Couple(5., 5.), 2., 1., 1.)
-nirina = Agent(Couple(7., 2.), 2., 2., 2.)
+marie = Agent([5,5], 2., 1., 1.)
+nirina = Agent([7,2], 2., 2., 2.)
 
 
 # Murs d'exemple
 
-mur0 = Obstacle([Couple(4., 1.), Couple(1., 1.)])
-mur1 = Obstacle([Couple(1., 1.), Couple(1., 14.)])
-mur2 = Obstacle([Couple(1., 14.), Couple(9., 14.)])
-mur3 = Obstacle([Couple(9., 14.), Couple(9., 1.)])
-mur4 = Obstacle([Couple(9., 1.), Couple(6., 1.)])
+mur0 = Obstacle([np.array([4,1]),np.array([1,1])])
+mur1 = Obstacle([np.array([1,1]), np.array([1,14])])
+mur2 = Obstacle([np.array([1,14]), np.array([9,14])])
+mur3 = Obstacle([np.array([9,14]), np.array([9,1])])
+mur4 = Obstacle([np.array([9,1]), np.array([6,1])])
 
 
 
 obstacles = [mur0, mur1, mur2, mur3, mur4]
 
-porte = Porte(Couple(4., 1.), Couple(6., 1.))
+porte = Porte(np.array([4,1]), np.array([6,1]))
 
 agents = [marie, nirina]
 portes = [porte]
