@@ -33,7 +33,7 @@ class Porte:
     def __init__(self, positionGauche, positionDroite):
         self.positionGauche = positionGauche
         self.positionDroite = positionDroite
-        self.positionCentre=Couple(0.5*(self.positionDroite+self.positionGauche)
+        self.positionCentre= 0.5*(self.positionDroite+self.positionGauche)
         
 class Obstacle:
     def __init__(self, sommets):
