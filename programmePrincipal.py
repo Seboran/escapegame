@@ -37,6 +37,8 @@ class Porte:
     def __init__(self, positionGauche, positionDroite):
         self.positionGauche = positionGauche
         self.positionDroite = positionDroite
+        self.positionCentre=Couple(0.5*(self.positionDroite.x+self.positionGauche.x),
+                                   0.5*(self.positionDroite.y+self.positionGauche.y))
         
 class Obstacle:
     def __init__(self, sommets):
@@ -91,6 +93,7 @@ class Environnement:
         
         axe.scatter(x, y)
         for obstacle in self.obstacles:
+
             x = []
             y = []
             for sommet in obstacle.sommets:
@@ -103,6 +106,26 @@ class Environnement:
             
 
 
+=======
+            axe.plot(obstacle.sommets) # TODO
+    
+def fintention(agent):
+    
+    #On cherche la porte la plus proche
+    
+    vect=[positionCentre.portes[0].x-agent.position.x,positionCentre.portes[0].y-agent.position.y]
+    vect=vect/np.linalg.norm(vect)
+    
+    for porte in portes[1:-1]:
+        
+        vect_test=[positionCentre.portes[0].x-agent.position.x,positionCentre.portes[0].y-agent.position.y]
+        vect_test=vect_test/np.linalg.norm(vect_test)
+        
+        if np.linalg.norm(vect_test)>
+        
+    return 
+    
+
 # Premier exemple
 
 Lx = 10.
@@ -114,8 +137,6 @@ marie = Agent(Couple(5., 5.), 2., 1., 1.)
 nirina = Agent(Couple(7., 2.), 2., 2., 2.)
 
 
-
-            
 
 # Murs d'exemple
 
