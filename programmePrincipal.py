@@ -118,7 +118,9 @@ def fintention(agent):
         vect_test=[porte.positionCentre.x-agent.position.x,porte.positionCentre.y-agent.position.y]
         vect_test=vect_test/np.linalg.norm(vect_test)
         
-
+        if np.linalg.norm(vect_test) < np.linalg.norm(vect):
+            
+            vect = vect_test
         
     return vect
     
