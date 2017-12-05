@@ -122,7 +122,7 @@ def fintention(agent):
             
             vect = vect_test
         
-    return vect
+    return agent.vitesseBase*vect
     
 
 # Premier exemple
@@ -134,12 +134,6 @@ Ny = 400
 
 marie = Agent(Couple(5., 5.), 2., 1., 1.)
 nirina = Agent(Couple(7., 2.), 2., 2., 2.)
-
-            
-TEST=fintention(marie)
-
-      
-
 
 
 # Murs d'exemple
@@ -168,6 +162,7 @@ fig, ax = plt.subplots(1,1)
 
 
 salleTest.afficher(fig, ax) 
+
 
 
 
