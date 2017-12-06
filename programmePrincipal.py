@@ -174,7 +174,7 @@ def fagent(agent1,agent2):
 
     sigma=agent1.sigma
     epsilon=agent1.epsilon
-    r = np.linalg.norm(agent1.position-agent2.position)
+    r = agent1.distance(agent2)
     
     vecteur = (agent1.position - agent2.position) / 2
     
