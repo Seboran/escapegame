@@ -13,6 +13,7 @@ import numpy as np
 import matplotlib.pylab as plt
 import time
 import scipy
+import random
 
 plt.close("all")
 
@@ -20,19 +21,32 @@ plt.close("all")
 
 numero_agent = 1
 numero_porte = -1
-
-        
+seuil_porte = 0.1
         
 class Agent:
-    def __init__(self, positionBase, vitesseBase, sigma, epsilon):
+    def __init__(self, positionBase, vitesseBase, sigma, epsilon, nom = '', color = ''):
         self.vitesseBase = vitesseBase
         self.sigma = sigma
         self.epsilon = epsilon
-        self.vitesse = [0, 0]
+        self.vitesse = np.array([0, 0])
         self.position = positionBase
+        r = lambda: random.randint(0,255)
+        if color == '':
+            self.color = ('#%02X%02X%02X' % (r(),r(),r()))
+        else:
+            self.color = color
+        self.alive = True
+        self.nom = nom
+        # note : si quelqu'un traverse une porte il peut toujours gêner la sortie d'une salle
         
-    def distance(self, agent):
-        return np.linalg.norm(self.position - agent.position)
+        
+    def distance(self, element):
+        if type(element) == Agent:
+            return np.linalg.norm(self.position - element.position)
+        if type(element) == Porte:
+            return np.linalg.norm(self.position - porte.positionCentre)
+    
+    
         
 class Porte:
     def __init__(self, positionGauche, positionDroite):
@@ -88,43 +102,59 @@ class Environnement:
     
             
     def maj(self):
+        #========================================================
         def maj_vitesse_agents():
-        
+            #========================================================
             def maj_vitesse_agent_intention(agent):
                 force = fintention(agent, self.portes)
                 agent.vitesse += force * self.dt
-                
+            #========================================================
+            #========================================================
             def maj_vitesse_agent_repulsion(agent):
                 for agent_i in self.agents:
+                    
                     if agent_i != agent:
+                        
                         force = fagent(agent, agent_i)
                         agent.vitesse += force * self.dt
-            
+            #========================================================
             for agent in self.agents:
-                agent.vitesse = [0, 0]
-                maj_vitesse_agent_intention(agent)
-                maj_vitesse_agent_repulsion(agent)
-            
+                if agent.alive:
+                    agent.vitesse = np.array([0., 0.])
+                    
+                    maj_vitesse_agent_intention(agent)
+                    maj_vitesse_agent_repulsion(agent)
+        #========================================================
+        
         def maj_position_agents():
-            for agent in agents:
-                agent.position = agent.position + self.dt * agent.vitesse
-        
-        
+            for agent in self.agents:
+                if agent.alive:
+                    agent.position = agent.position + self.dt * agent.vitesse
                 
+        def maj_agents_alive():
+            for agent in self.agents:
+                for porte in self.portes:
+                    if agent.distance(porte) < seuil_porte:
+                        agent.alive = False
+
         maj_vitesse_agents()
         maj_position_agents()
-        
+        maj_agents_alive()
+    
         
     def afficher(self, figure, axe):
         x = []
         y = []
+        color = []
         axe.set_xlim(0, self.Lx)
         axe.set_ylim(0, self.Ly)
         for agent in self.agents:
             x.append(agent.position[0])
             y.append(agent.position[1])
+            color.append(agent.color)
+            
         
-        axe.scatter(x, y)
+        axe.scatter(x, y, c = color)
         for obstacle in self.obstacles:
 
             x = []
@@ -176,9 +206,14 @@ def fagent(agent1,agent2):
     epsilon=agent1.epsilon
     r = agent1.distance(agent2)
     
-    vecteur = (agent1.position - agent2.position) / 2
+    vecteur_unitaire = (agent1.position - agent2.position) / r
     
-    return -Dpotentiel(r,sigma,epsilon) * vecteur
+    if agent2.alive:
+        amplitude = -Dpotentiel(r,sigma,epsilon)
+    else:
+        amplitude = 0.
+    
+    return amplitude * vecteur_unitaire
     
     
 
@@ -190,12 +225,12 @@ Ly = 15.
 Nx = 400
 Ny = 400
 dt = 0.1
-epsilon = 1.0e-12
+epsilon = 1.0
 sigma = 1.
 
-marie = Agent(np.array([5,5]), epsilon, sigma, 1.)
-nirina = Agent(np.array([5, 6.1]), epsilon, sigma, 2.)
-
+marie = Agent(np.array([5,5]), 1., sigma, epsilon, 'marie')
+nirina = Agent(np.array([np.sqrt(2)/2 * 5., np.sqrt(2)/2 * 5]), 1., sigma, epsilon, 'nirina')
+luc = Agent(np.array([9., 13.]), 1., sigma, epsilon, 'luc')
 
 # Murs d'exemple
 
@@ -211,7 +246,7 @@ obstacles = [mur0, mur1, mur2, mur3, mur4]
 
 porte = Porte(np.array([4,1]), np.array([6,1]))
 
-agents = [marie, nirina]
+agents = [marie, nirina, luc]
 portes = [porte]
 
 TEST=fintention(marie, portes)
@@ -225,7 +260,7 @@ plt.show()
 
 salleTest.afficher(fig, ax) 
 
-for i in range(100):
+for i in range(10):
     salleTest.maj()
     salleTest.afficher(fig, ax)
     
