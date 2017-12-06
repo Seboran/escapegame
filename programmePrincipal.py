@@ -87,7 +87,13 @@ class Environnement:
         
             def maj_vitesse_agent_intention(agent):
                 force = fintention(agent, self.portes)
-                agent.vitesse += force
+                agent.vitesse += force * self.dt
+                
+            def maj_vitesse_agent_repulsion(agent):
+                for agent_i in self.agents:
+                    if agent_i != agent:
+                        force = fagent(agent, agent_i)
+                        agent.vitesse += force * self.dt
             
             for agent in self.agents:
                 agent.vitesse = [0, 0]
@@ -96,6 +102,8 @@ class Environnement:
         def maj_position_agents():
             for agent in agents:
                 agent.position = agent.position + self.dt * agent.vitesse
+        
+        
                 
         maj_vitesse_agents()
         maj_position_agents()
