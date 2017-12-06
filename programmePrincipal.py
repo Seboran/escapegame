@@ -224,57 +224,62 @@ Lx = 10.
 Ly = 15.
 Nx = 400
 Ny = 400
-dt = 0.1
-epsilon = 1.0
+dt = 0.2
 sigma = 1.
+epsilon = 1.0
 
-marie = Agent(np.array([5,5]), 1., sigma, epsilon, 'marie')
-nirina = Agent(np.array([np.sqrt(2)/2 * 5., np.sqrt(2)/2 * 5]), 1., sigma, epsilon, 'nirina')
-luc = Agent(np.array([9., 13.]), 1., sigma, epsilon, 'luc')
-
-# Murs d'exemple
-
-mur0 = Obstacle([np.array([4,1]),np.array([1,1])])
-mur1 = Obstacle([np.array([1,1]), np.array([1,14])])
-mur2 = Obstacle([np.array([1,14]), np.array([9,14])])
-mur3 = Obstacle([np.array([9,14]), np.array([9,1])])
-mur4 = Obstacle([np.array([9,1]), np.array([6,1])])
-
-
-
-obstacles = [mur0, mur1, mur2, mur3, mur4]
-
-porte = Porte(np.array([4,1]), np.array([6,1]))
-
-agents = [marie, nirina, luc]
-portes = [porte]
-
-TEST=fintention(marie, portes)
-
-salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
-
-
-fig, ax = plt.subplots(1,1)
-
-plt.show()
-
-salleTest.afficher(fig, ax) 
-
-for i in range(10):
-    salleTest.maj()
-    salleTest.afficher(fig, ax)
+dts = np.linspace(0.1, 1, 10)
+for dt in dts:
     
-
-
-
-
-
-
-
-
-
-
-
+    
+    marie = Agent(np.array([5,5]), 1., sigma, epsilon, 'marie')
+    nirina = Agent(np.array([np.sqrt(2.)/2. * 5., np.sqrt(2.)/2. * 5.]), 1., sigma, epsilon, 'nirina')
+    luc = Agent(np.array([10 - np.sqrt(2.)/2. * 5., np.sqrt(2.)/2. * 5.]), 1., sigma, epsilon, 'luc')
+    
+    # Murs d'exemple
+    
+    mur0 = Obstacle([np.array([4,1]),np.array([1,1])])
+    mur1 = Obstacle([np.array([1,1]), np.array([1,14])])
+    mur2 = Obstacle([np.array([1,14]), np.array([9,14])])
+    mur3 = Obstacle([np.array([9,14]), np.array([9,1])])
+    mur4 = Obstacle([np.array([9,1]), np.array([6,1])])
+    
+    
+    
+    obstacles = [mur0, mur1, mur2, mur3, mur4]
+    
+    porte = Porte(np.array([4,1]), np.array([6,1]))
+    
+    agents = [marie, nirina, luc]
+    portes = [porte]
+    
+    TEST=fintention(marie, portes)
+    
+    salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
+    
+    
+    fig, ax = plt.subplots(1,1)
+    
+    plt.show()
+    
+    salleTest.afficher(fig, ax) 
+    
+    for i in range(int(10 / dt)):
+        salleTest.maj()
+    
+        salleTest.afficher(fig, ax)
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 
