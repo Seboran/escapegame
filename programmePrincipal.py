@@ -16,6 +16,8 @@ import scipy
 
 plt.close("all")
 
+
+
 numero_agent = 1
 numero_porte = -1
 
@@ -28,6 +30,9 @@ class Agent:
         self.epsilon = epsilon
         self.vitesse = [0, 0]
         self.position = positionBase
+        
+    def distance(self, agent):
+        return np.linalg.norm(self.position - agent.position)
         
 class Porte:
     def __init__(self, positionGauche, positionDroite):
@@ -98,6 +103,7 @@ class Environnement:
             for agent in self.agents:
                 agent.vitesse = [0, 0]
                 maj_vitesse_agent_intention(agent)
+                maj_vitesse_agent_repulsion(agent)
             
         def maj_position_agents():
             for agent in agents:
@@ -168,9 +174,11 @@ def fagent(agent1,agent2):
 
     sigma=agent1.sigma
     epsilon=agent1.epsilon
-    r=np.linalg.norme(agent1.position-agent2.position)
+    r = np.linalg.norm(agent1.position-agent2.position)
     
-    return -Dpotentiel(r,sigma,epsilon)
+    vecteur = (agent1.position - agent2.position) / 2
+    
+    return -Dpotentiel(r,sigma,epsilon) * vecteur
     
     
 
@@ -182,9 +190,11 @@ Ly = 15.
 Nx = 400
 Ny = 400
 dt = 0.1
+epsilon = 1.0e-12
+sigma = 1.
 
-marie = Agent(np.array([5,5]), 2., 1., 1.)
-nirina = Agent(np.array([7,2]), 2., 2., 2.)
+marie = Agent(np.array([5,5]), epsilon, sigma, 1.)
+nirina = Agent(np.array([5, 6.1]), epsilon, sigma, 2.)
 
 
 # Murs d'exemple
@@ -215,7 +225,7 @@ plt.show()
 
 salleTest.afficher(fig, ax) 
 
-for i in range(10):
+for i in range(100):
     salleTest.maj()
     salleTest.afficher(fig, ax)
     
