@@ -338,8 +338,8 @@ sigma = 0.5
 epsilon = 1.0
     
 
-marie = Agent(np.array([5,5]), 1., sigma, epsilon, 'marie')
-nirina = Agent(np.array([np.sqrt(2.)/2. * 5., np.sqrt(2.)/2. * 5.]), 1., sigma, epsilon, 'nirina')
+marie = Agent(np.array([5,5]), 1., sigma, epsilon*2, 'marie')
+nirina = Agent(np.array([np.sqrt(2.)/2. * 5., np.sqrt(2.)/2. * 5.]), 1., sigma, epsilon/2, 'nirina')
 luc = Agent(np.array([8., 2.]), 1., sigma, epsilon, 'luc')
 
 
