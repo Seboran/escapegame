@@ -29,6 +29,7 @@ class Agent:
         self.sigma = sigma
         self.epsilon = epsilon
         self.vitesse = np.array([0, 0])
+
         self.position = positionBase
         r = lambda: random.randint(0,255)
         if color == '':
@@ -45,13 +46,12 @@ class Agent:
             return np.linalg.norm(self.position - element.position)
         if type(element) == Porte:
             return np.linalg.norm(self.position - porte.positionCentre)
-    
-    
+
         
 class Porte:
     def __init__(self, positionGauche, positionDroite):
-        self.positionGauche = positionGauche
-        self.positionDroite = positionDroite
+        self.positionGauche = np.array(positionGauche)
+        self.positionDroite = np.array(positionDroite)
 
         self.positionCentre= 0.5*(self.positionDroite+self.positionGauche)
 
@@ -59,7 +59,10 @@ class Porte:
 class Obstacle:
     def __init__(self, sommets):
         # Sommets est un couple de couples
-        self.sommets = sommets
+        self.sommets = np.array(sommets)
+    def __del__(self):
+        del self.sommets
+
         
 class Grille:
     def __init__(self, Nx, Ny): 
@@ -173,7 +176,78 @@ class Environnement:
         for porte in self.portes:
             pos_porte = porte.positionCentre
             plt.plot(pos_porte[0], pos_porte[1], 'x')
+
+def build_walls(Lx,Ly,portes):
+#On suppose que les portes sont bien définies
     
+    liste_murs=[]
+    murd=[0,Ly]
+    murg=[0,Ly]
+    murh=[0,Lx]
+    murb=[0,Lx]
+    
+    for porte in portes:
+        
+        #Si x est le même : porte à gauche ou à droite
+        if porte.positionGauche[0]==porte.positionDroite[0]:
+            
+            xp=porte.positionGauche[0]
+            
+            #La porte est à gauche
+            if xp==0:
+                murg+=[porte.positionGauche[1],porte.positionDroite[1]]
+            #La porte est à droite
+            else:
+                murd+=[porte.positionGauche[1],porte.positionDroite[1]]
+            
+        #Sinon y est le même : porte en haut ou en bas
+        else:
+            
+            yp=porte.positionGauche[1]
+            
+            #La porte est en bas
+            if yp==0:
+                murb+=[porte.positionGauche[0],porte.positionDroite[0]]
+            #La porte est en haut
+            else:
+                murh+=[porte.positionGauche[0],porte.positionDroite[0]]
+    
+    murb=sorted(murb)
+    murh=sorted(murh)
+    murd=sorted(murd)
+    murg=sorted(murg)
+    
+    
+    #Build left walls
+    liste_murs+=[Obstacle([[0,murg[0]],[0,murg[1]]])]
+    
+    for i in range(2,len(murg),2):
+        
+        liste_murs.append(Obstacle([[0,murg[i]],[0,murg[i+1]]]))
+       
+    #Build right walls
+    liste_murs.append(Obstacle([[0,murd[0]],[0,murd[1]]]))
+    
+    for i in range(2,len(murd),2):
+        
+        liste_murs.append(Obstacle([[Lx,murd[i]],[Lx,murd[i+1]]]))
+        
+    #Build bottom walls
+    liste_murs.append(Obstacle([[murb[0],0],[murb[1],0]]))
+    
+    for i in range(2,len(murb),2):
+        
+        liste_murs.append(Obstacle([[murb[i],0],[murb[i+1],0]]))
+    
+    #Build top walls
+    liste_murs.append(Obstacle([[murh[0],Ly],[murh[1],Ly]]))
+    
+    for i in range(2,len(murh),2):
+        
+        liste_murs.append(Obstacle([[murh[i],0],[murh[i+1],0]]))
+            
+    return liste_murs
+
 
 def fintention(agent, portes):
 
@@ -258,6 +332,7 @@ Lx = 10.
 Ly = 15.
 Nx = 400
 Ny = 400
+
 dt = 0.1
 sigma = 0.5
 epsilon = 1.0
@@ -267,24 +342,28 @@ marie = Agent(np.array([5,5]), 1., sigma, epsilon, 'marie')
 nirina = Agent(np.array([np.sqrt(2.)/2. * 5., np.sqrt(2.)/2. * 5.]), 1., sigma, epsilon, 'nirina')
 luc = Agent(np.array([8., 2.]), 1., sigma, epsilon, 'luc')
 
+
 # Murs d'exemple
 
-mur0 = Obstacle([np.array([4,1]),np.array([1,1])])
-mur1 = Obstacle([np.array([1,1]), np.array([1,14])])
-mur2 = Obstacle([np.array([1,14]), np.array([9,14])])
-mur3 = Obstacle([np.array([9,14]), np.array([9,1])])
-mur4 = Obstacle([np.array([9,1]), np.array([6,1])])
+#==============================================================================
+# mur0 = Obstacle([[4,1],[1,1]])
+# mur1 = Obstacle([[1,1], [1,14]])
+# mur2 = Obstacle([[1,14], [9,14]])
+# mur3 = Obstacle([[9,14], [9,1]])
+# mur4 = Obstacle([[9,1], [6,1]])
+# 
+# 
+# 
+# obstacles = [mur0, mur1, mur2, mur3, mur4]
+#==============================================================================
 
 
+porte = Porte([4,0], [6,0])
 
-obstacles = [mur0, mur1, mur2, mur3, mur4]
-
-porte = Porte(np.array([4,0]), np.array([6,0]))
 
 agents = [marie, nirina, luc]
 portes = [porte]
-
-TEST=fintention(marie, portes)
+obstacles=build_walls(Lx,Ly,portes)
 
 salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
 
