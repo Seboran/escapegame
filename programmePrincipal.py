@@ -117,6 +117,10 @@ class Environnement:
                         
                         force = fagent(agent, agent_i)
                         agent.vitesse += force * self.dt
+            def maj_vitesse_agent_repulsion_mur(agent):
+                for obstacle in self.obstacles:
+                    force = f_repulsion_obstacle(agent, obstacle)
+                    agent.vitesse += force * self.dt
             #========================================================
             for agent in self.agents:
                 if agent.alive:
@@ -124,6 +128,7 @@ class Environnement:
                     
                     maj_vitesse_agent_intention(agent)
                     maj_vitesse_agent_repulsion(agent)
+                    maj_vitesse_agent_repulsion_mur(agent)
         #========================================================
         
         def maj_position_agents():
@@ -192,12 +197,11 @@ def fintention(agent, portes):
 def Dpotentiel(r,sigma,epsilon):
 #La dérivée du potentiel de répulsion
     
-    if r<2**(1/6)*sigma:
+    if r < 2**(1/6)*sigma:
         
         return 4*epsilon*(-12*(sigma/r)**12/r+6*(sigma/r)**6/r)
-    
-    else:
-        return 0
+
+    return 0
     
 def fagent(agent1,agent2):
 #Force de répulsion entre deux agents
@@ -209,11 +213,41 @@ def fagent(agent1,agent2):
     vecteur_unitaire = (agent1.position - agent2.position) / r
     
     if agent2.alive:
-        amplitude = -Dpotentiel(r,sigma,epsilon)
+        amplitude = -Dpotentiel(r,sigma*2,epsilon)
     else:
         amplitude = 0.
     
     return amplitude * vecteur_unitaire
+    
+def f_repulsion_obstacle(agent, obstacle):
+    K, L = obstacle.sommets
+    A = agent.position
+    KL = L - K
+    KA = A - K
+    
+    d = np.dot(KL, KA)
+    theta = d / np.linalg.norm(KL)**2
+    KH = theta * KL
+    H = K + KH
+    
+    #print(theta)
+    if theta < 0.:
+        H = K
+    elif theta > 1.:
+        H = L
+    #print(H)
+    HA = -agent.position + H 
+    #print(HA)
+    distanceHA = np.linalg.norm(HA)
+    HA_u = HA / distanceHA
+    
+    #print(distanceHA)
+    potentiel = Dpotentiel(distanceHA, agent.sigma, agent.epsilon)
+    force = HA_u * potentiel
+
+    #print(potentiel)
+    #print(force)
+    return force
     
     
 
@@ -224,62 +258,60 @@ Lx = 10.
 Ly = 15.
 Nx = 400
 Ny = 400
-dt = 0.2
-sigma = 1.
+dt = 0.1
+sigma = 0.5
 epsilon = 1.0
+    
 
-dts = np.linspace(0.1, 1, 10)
-for dt in dts:
+marie = Agent(np.array([5,5]), 1., sigma, epsilon, 'marie')
+nirina = Agent(np.array([np.sqrt(2.)/2. * 5., np.sqrt(2.)/2. * 5.]), 1., sigma, epsilon, 'nirina')
+luc = Agent(np.array([8., 2.]), 1., sigma, epsilon, 'luc')
+
+# Murs d'exemple
+
+mur0 = Obstacle([np.array([4,1]),np.array([1,1])])
+mur1 = Obstacle([np.array([1,1]), np.array([1,14])])
+mur2 = Obstacle([np.array([1,14]), np.array([9,14])])
+mur3 = Obstacle([np.array([9,14]), np.array([9,1])])
+mur4 = Obstacle([np.array([9,1]), np.array([6,1])])
+
+
+
+obstacles = [mur0, mur1, mur2, mur3, mur4]
+
+porte = Porte(np.array([4,0]), np.array([6,0]))
+
+agents = [marie, nirina, luc]
+portes = [porte]
+
+TEST=fintention(marie, portes)
+
+salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
+
+
+fig, ax = plt.subplots(1,1)
+
+plt.show()
+
+salleTest.afficher(fig, ax) 
+print(dt)
+for i in range(500):
+    print(i)
+    salleTest.maj()
+
+    salleTest.afficher(fig, ax)
     
-    
-    marie = Agent(np.array([5,5]), 1., sigma, epsilon, 'marie')
-    nirina = Agent(np.array([np.sqrt(2.)/2. * 5., np.sqrt(2.)/2. * 5.]), 1., sigma, epsilon, 'nirina')
-    luc = Agent(np.array([10 - np.sqrt(2.)/2. * 5., np.sqrt(2.)/2. * 5.]), 1., sigma, epsilon, 'luc')
-    
-    # Murs d'exemple
-    
-    mur0 = Obstacle([np.array([4,1]),np.array([1,1])])
-    mur1 = Obstacle([np.array([1,1]), np.array([1,14])])
-    mur2 = Obstacle([np.array([1,14]), np.array([9,14])])
-    mur3 = Obstacle([np.array([9,14]), np.array([9,1])])
-    mur4 = Obstacle([np.array([9,1]), np.array([6,1])])
-    
-    
-    
-    obstacles = [mur0, mur1, mur2, mur3, mur4]
-    
-    porte = Porte(np.array([4,1]), np.array([6,1]))
-    
-    agents = [marie, nirina, luc]
-    portes = [porte]
-    
-    TEST=fintention(marie, portes)
-    
-    salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
-    
-    
-    fig, ax = plt.subplots(1,1)
-    
-    plt.show()
-    
-    salleTest.afficher(fig, ax) 
-    
-    for i in range(int(10 / dt)):
-        salleTest.maj()
-    
-        salleTest.afficher(fig, ax)
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
 
 
 
