@@ -17,7 +17,7 @@ import scipy
 plt.close("all")
 
 numero_agent = 1
-numero_porte = -1
+numero_obstacle = -1
 
         
         
@@ -41,14 +41,7 @@ class Obstacle:
     def __init__(self, sommets):
         # Sommets est un couple de couples
         self.sommets = np.array(sommets)
-    def __del__(self):
-        del self.sommets
 
-        
-class Grille:
-    def __init__(self, Nx, Ny): 
-        self.tab = [[0]*Nx for _ in range(Ny)]
-    
         
 class Environnement:
     def __init__(self, Lx, Ly, Nx, Ny, dt, obstacles, agents, portes):
@@ -60,20 +53,41 @@ class Environnement:
         self.Nx = Nx
         self.Ny = Ny
         self.dt = dt
-        self.grille = Grille(Nx, Ny)
+        self.grille = np.zeros((Nx+1,Ny+1))
         
         def meter_to_int(x, N, L):
             return int(x * N / L) # dégueulasse
         
         for obstacle in obstacles:
-            # TODO
-            2;
+            
+            if obstacle.sommets[0,0]==obstacle.sommets[1,0]:
+            #Obstacle vertical
+                
+                xo=meter_to_int(obstacle.sommets[0,0],Nx,Lx)
+                ymin=meter_to_int(min(obstacle.sommets[0,1],obstacle.sommets[1,1]),Ny,Ly)
+                ymax=meter_to_int(max(obstacle.sommets[0,1],obstacle.sommets[1,1]),Ny,Ly)
+    
+                for j in range(ymin,ymax+1):
+                    
+                    self.grille[xo,j]=numero_obstacle
+                           
+            elif obstacle.sommets[0,1]==obstacle.sommets[1,1]:
+            #Obstacle horizontal
+            
+                yo=meter_to_int(obstacle.sommets[0,1],Ny,Ly)
+                xmin=meter_to_int(min(obstacle.sommets[0,0],obstacle.sommets[1,0]),Nx,Lx)
+                xmax=meter_to_int(max(obstacle.sommets[0,0],obstacle.sommets[1,0]),Nx,Lx)
+    
+                for i in range(xmin,xmax+1):
+                    
+                    self.grille[i,yo]=numero_obstacle      
+            
             
         for agent in agents:
             nx = meter_to_int(agent.position[0], Nx, Lx)
             ny = meter_to_int(agent.position[1], Ny, Ly)
             
-            self.grille.tab[nx][ny] = numero_agent
+            self.grille[nx][ny] = numero_agent
             
         for porte in portes:
             #Todo
@@ -168,7 +182,6 @@ def build_walls(Lx,Ly,portes):
     murd=sorted(murd)
     murg=sorted(murg)
     
-    
     #Build left walls
     liste_murs+=[Obstacle([[0,murg[0]],[0,murg[1]]])]
     
@@ -177,7 +190,7 @@ def build_walls(Lx,Ly,portes):
         liste_murs.append(Obstacle([[0,murg[i]],[0,murg[i+1]]]))
        
     #Build right walls
-    liste_murs.append(Obstacle([[0,murd[0]],[0,murd[1]]]))
+    liste_murs.append(Obstacle([[Lx,murd[0]],[Lx,murd[1]]]))
     
     for i in range(2,len(murd),2):
         
@@ -195,13 +208,15 @@ def build_walls(Lx,Ly,portes):
     
     for i in range(2,len(murh),2):
         
-        liste_murs.append(Obstacle([[murh[i],0],[murh[i+1],0]]))
+        liste_murs.append(Obstacle([[murh[i],Ly],[murh[i+1],Ly]]))
             
     return liste_murs
 
+#==============================================================================
+# Forces
+#==============================================================================
 
 def fintention(agent, portes):
-
 # Intention naturellle pour un agent d'aller vers la porte la plus proche
 
     
@@ -252,21 +267,6 @@ dt = 0.5
 marie = Agent([5,5], 2., 1., 1.)
 nirina = Agent([7,2], 2., 2., 2.)
 
-
-# Murs d'exemple
-
-#==============================================================================
-# mur0 = Obstacle([[4,1],[1,1]])
-# mur1 = Obstacle([[1,1], [1,14]])
-# mur2 = Obstacle([[1,14], [9,14]])
-# mur3 = Obstacle([[9,14], [9,1]])
-# mur4 = Obstacle([[9,1], [6,1]])
-# 
-# 
-# 
-# obstacles = [mur0, mur1, mur2, mur3, mur4]
-#==============================================================================
-
 porte = Porte([4,0], [6,0])
 
 agents = [marie, nirina]
@@ -288,7 +288,7 @@ for i in range(10):
     
 
 
-
+GRILLE=salleTest.grille
 
 
 
