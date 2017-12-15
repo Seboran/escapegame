@@ -324,6 +324,9 @@ def f_repulsion_obstacle(agent, obstacle):
     return force
     
     
+def random_agent(Lx, Ly, sigma, epsilon):
+    return Agent(np.array([Lx * random.random(), Ly * random.random()]), 1, sigma, epsilon)
+
 
 
 # Premier exemple
@@ -334,9 +337,11 @@ Nx = 400
 Ny = 400
 
 dt = 0.1
-sigma = 0.5
+sigma = 0.1
 epsilon = 1.0
-    
+
+
+
 
 marie = Agent(np.array([5,5]), 1., sigma, epsilon*2, 'marie')
 nirina = Agent(np.array([np.sqrt(2.)/2. * 5., np.sqrt(2.)/2. * 5.]), 1., sigma, epsilon/2, 'nirina')
@@ -346,15 +351,15 @@ luc = Agent(np.array([8., 2.]), 1., sigma, epsilon, 'luc')
 # Murs d'exemple
 
 #==============================================================================
-# mur0 = Obstacle([[4,1],[1,1]])
-# mur1 = Obstacle([[1,1], [1,14]])
-# mur2 = Obstacle([[1,14], [9,14]])
-# mur3 = Obstacle([[9,14], [9,1]])
-# mur4 = Obstacle([[9,1], [6,1]])
+#mur0 = Obstacle([[4,1],[1,1]])
+#mur1 = Obstacle([[1,1], [1,14]])
+#mur2 = Obstacle([[1,14], [9,14]])
+#mur3 = Obstacle([[9,14], [9,1]])
+#mur4 = Obstacle([[9,1], [6,1]])
 # 
 # 
 # 
-# obstacles = [mur0, mur1, mur2, mur3, mur4]
+#obstacles = [mur0, mur1, mur2, mur3, mur4]
 #==============================================================================
 
 
@@ -362,6 +367,10 @@ porte = Porte([4,0], [6,0])
 
 
 agents = [marie, nirina, luc]
+
+for i in range(20):
+    agents.append(random_agent(Lx, Ly, sigma, epsilon))
+    
 portes = [porte]
 obstacles=build_walls(Lx,Ly,portes)
 
