@@ -111,7 +111,7 @@ class Environnement:
             #========================================================
             def maj_vitesse_agent_intention(agent):
                 force = fintention(agent, self.portes)
-                agent.vitesse += force * self.dt
+                agent.vitesse += force
             #========================================================
             #========================================================
             def maj_vitesse_agent_repulsion(agent):
@@ -120,11 +120,11 @@ class Environnement:
                     if agent_i != agent:
                         
                         force = fagent(agent, agent_i)
-                        agent.vitesse += force * self.dt
+                        agent.vitesse += force
             def maj_vitesse_agent_repulsion_mur(agent):
                 for obstacle in self.obstacles:
                     force = f_repulsion_obstacle(agent, obstacle)
-                    agent.vitesse += force * self.dt
+                    agent.vitesse += force
             #========================================================
             for agent in self.agents:
                 if agent.alive:
@@ -326,7 +326,7 @@ def f_repulsion_obstacle(agent, obstacle):
     
     
 def random_agent(Lx, Ly, sigma, epsilon):
-    return Agent(np.array([Lx * random.random(), Ly * random.random()]), 1, sigma, epsilon)
+    return Agent(np.array([1 + 8 * random.random(), 1 + 13 * random.random()]), 1, sigma, epsilon)
 
 
 
@@ -337,9 +337,11 @@ Ly = 15.
 Nx = 400
 Ny = 400
 
-dt = 0.05
+dt = 0.001
 sigma = 0.1
 epsilon = 1.0
+T = 5
+nombreT = int(T/dt)
 
 
 
@@ -358,12 +360,12 @@ mur2 = Obstacle([[1,14], [9,14]])
 mur3 = Obstacle([[9,14], [9,1]])
 mur4 = Obstacle([[9,1], [6,1]])
  
-table1_1 = Obstacle([[6, 10], [6, 11]]) 
-table1_2 = Obstacle([[6, 11], [4, 11]])
-table1_3 = Obstacle([[4, 11], [4, 10]])
-table1_4 = Obstacle([[4, 10], [6, 10]])
- 
-obstacles = [mur0, mur1, mur2, mur3, mur4, table1_1, table1_2, table1_3, table1_4]
+#table1_1 = Obstacle([[6, 10], [6, 11]]) 
+#table1_2 = Obstacle([[6, 11], [4, 11]])
+#table1_3 = Obstacle([[4, 11], [4, 10]])
+#table1_4 = Obstacle([[4, 10], [6, 10]])
+# 
+obstacles = [mur0, mur1, mur2, mur3, mur4]#, table1_1, table1_2, table1_3, table1_4]
 #==============================================================================
 
 
@@ -372,7 +374,7 @@ porte = Porte([4,0], [6,0])
 
 agents = [marie, nirina, luc]
 
-for i in range(5):
+for i in range(0):
     agents.append(random_agent(Lx, Ly, sigma, epsilon))
     
 portes = [porte]
@@ -389,7 +391,14 @@ fig.show()
 
 salleTest.afficher(fig, ax) 
 
+print(dt)
+for i in range(nombreT):
 
+    salleTest.maj()
+
+    salleTest.afficher(fig, ax)
+    #time.sleep(0.001)
+    
 
 
 
