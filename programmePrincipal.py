@@ -11,6 +11,7 @@ Created on Thu Nov 30 10:29:35 2017
 
 import numpy as np
 import matplotlib.pylab as plt
+import matplotlib.animation as animation
 import time
 import scipy
 import random
@@ -336,7 +337,7 @@ Ly = 15.
 Nx = 400
 Ny = 400
 
-dt = 0.1
+dt = 0.05
 sigma = 0.1
 epsilon = 1.0
 
@@ -351,15 +352,18 @@ luc = Agent(np.array([8., 2.]), 1., sigma, epsilon, 'luc')
 # Murs d'exemple
 
 #==============================================================================
-#mur0 = Obstacle([[4,1],[1,1]])
-#mur1 = Obstacle([[1,1], [1,14]])
-#mur2 = Obstacle([[1,14], [9,14]])
-#mur3 = Obstacle([[9,14], [9,1]])
-#mur4 = Obstacle([[9,1], [6,1]])
-# 
-# 
-# 
-#obstacles = [mur0, mur1, mur2, mur3, mur4]
+mur0 = Obstacle([[4,1],[1,1]])
+mur1 = Obstacle([[1,1], [1,14]])
+mur2 = Obstacle([[1,14], [9,14]])
+mur3 = Obstacle([[9,14], [9,1]])
+mur4 = Obstacle([[9,1], [6,1]])
+ 
+table1_1 = Obstacle([[6, 10], [6, 11]]) 
+table1_2 = Obstacle([[6, 11], [4, 11]])
+table1_3 = Obstacle([[4, 11], [4, 10]])
+table1_4 = Obstacle([[4, 10], [6, 10]])
+ 
+obstacles = [mur0, mur1, mur2, mur3, mur4, table1_1, table1_2, table1_3, table1_4]
 #==============================================================================
 
 
@@ -368,32 +372,22 @@ porte = Porte([4,0], [6,0])
 
 agents = [marie, nirina, luc]
 
-for i in range(20):
+for i in range(5):
     agents.append(random_agent(Lx, Ly, sigma, epsilon))
     
 portes = [porte]
-obstacles=build_walls(Lx,Ly,portes)
+#obstacles=build_walls(Lx,Ly,portes)
 
 salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
 
 
 fig, ax = plt.subplots(1,1)
 
-plt.show()
+fig.show()
+
+
 
 salleTest.afficher(fig, ax) 
-print(dt)
-for i in range(500):
-    print(i)
-    salleTest.maj()
-
-    salleTest.afficher(fig, ax)
-    
-
-
-
-
-
 
 
 
