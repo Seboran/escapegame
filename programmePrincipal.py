@@ -47,7 +47,7 @@ class Agent:
         if type(element) == Agent:
             return np.linalg.norm(self.position - element.position)
         if type(element) == Porte:
-            return np.linalg.norm(self.position - porte.positionCentre)
+            return np.linalg.norm(self.position - element.positionCentre)
 
         
 class Porte:
@@ -258,18 +258,25 @@ def build_walls(Lx,Ly,portes):
     return liste_murs
 
 def bfs(Nx, Ny, grid, start, goal):
+    ''' Prend des coordonnés cases sans unités
+    Ne pas mettre de floats ou de mètres'''
     queue = collections.deque([[start]])
-    seen = set([start])
+    
+    
+    
+    grid_seen = np.zeros([Nx, Ny])
+    
+    grid_seen[start[0], start[1]] = 1
     while queue:
         path = queue.popleft()
         x, y = path[-1]
-        if grid[y][x] == goal:
+        if x == goal[0] and y == goal[1]:
             return path
         for x2, y2 in ((x+1,y), (x-1,y), (x,y+1), (x,y-1)):
-            if 0 <= x2 < Nx and 0 <= y2 < Ny and grid[y2][x2] != 1 and (x2, y2) not in seen:
-                queue.append(path + [(x2, y2)])
-                seen.add((x2, y2))
-    return seen
+            if 0 <= x2 < Nx and 0 <= y2 < Ny and grid[x2][y2] != 1 and grid_seen[x2, y2] != 1:
+                queue.append(path + [[x2, y2]])
+                grid_seen[x2, y2] = 1
+    raise Exception
 
 
 
@@ -280,7 +287,7 @@ def fintention(agent, portes):
     # Utilise l'algorithme de dijkstra
     vect=portes[0].positionCentre - agent.position
     vect_norm = np.linalg.norm(vect)
-    
+    porte_cible = portes[0]
     
     for porte in portes[1:]:
         
@@ -291,8 +298,11 @@ def fintention(agent, portes):
         if vect_test_norm < vect_norm:
             
             vect = vect_test
+            porte_cible = porte
     
     vect = vect / vect_norm
+    #bfs(Nx, Ny, grid, agent.position, porte_cible)
+    
     return agent.vitesseBase * np.array(vect)
 
 
@@ -395,12 +405,13 @@ Ly = 11.11
 Nx = 400
 Ny = 400
 
-nombreT = 500
+nombreT = 50000
+T = 120
 dt = T/nombreT
-dt = 0.1
+
 sigma = 0.1
 epsilon = 1.0
-T = 120
+
 
 
 
@@ -460,9 +471,9 @@ def generer_table(debut, fin):
     
 tables = []
 eleves = []
-for i in range(7):
+for i in range(3):
     tables = tables + generer_table([1.5 + 0.25, 2.5 + 3 + i], [1.5 + 0.25 + 10, i + 2.9 + 3])
-    for j in range(16):
+    for j in range(6):
         eleve = Agent(np.array([2 + j * 0.6,6.1 + i]), 1., sigma, epsilon*2, 'marie')
         eleves.append(eleve)
     
@@ -501,6 +512,7 @@ for i in range(nombreT):
     salleTest.maj()
 
     salleTest.afficher(fig, ax)
+    print(agents_in_zone_count(agents, [[0, 3], [13.52, 11.11]]))
     #time.sleep(0.001)
     print(i)
     
