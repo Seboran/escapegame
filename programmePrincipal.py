@@ -579,7 +579,6 @@ salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
 
 
 
-
 print(dt)
 agents_positions = list(salleTest.maj_turns(nombreT))
 
