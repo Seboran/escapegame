@@ -15,6 +15,7 @@ import matplotlib.animation as animation
 import time
 import scipy
 import random
+import collections
 
 plt.close("all")
 
@@ -86,17 +87,24 @@ class Environnement:
             return int(x * N / L) # dégueulasse
         
         for obstacle in obstacles:
-            # TODO
+            # Remplis la grille avec les murs
+#            debut, fin = obstacle
+#            x1, y1 = debut
+#            x2, y2 = fin
+            # On rajoute à chaque case où il y a un mur un entier non nul
+#            for x in range(meter_to_int(x1), meter_to_int(x2) + 1):
+#                for y in range(meter_to_int(y1), meter_to_int(y2) + 1):
             2;
             
         for agent in agents:
             nx = meter_to_int(agent.position[0], Nx, Lx)
             ny = meter_to_int(agent.position[1], Ny, Ly)
             
-            self.grille.tab[nx][ny] = numero_agent
+            #self.grille.tab[nx][ny] = numero_agent
             
         for porte in portes:
             #Todo
+            
             
             2;
             
@@ -249,25 +257,45 @@ def build_walls(Lx,Ly,portes):
             
     return liste_murs
 
+def bfs(Nx, Ny, grid, start, goal):
+    queue = collections.deque([[start]])
+    seen = set([start])
+    while queue:
+        path = queue.popleft()
+        x, y = path[-1]
+        if grid[y][x] == goal:
+            return path
+        for x2, y2 in ((x+1,y), (x-1,y), (x,y+1), (x,y-1)):
+            if 0 <= x2 < Nx and 0 <= y2 < Ny and grid[y2][x2] != 1 and (x2, y2) not in seen:
+                queue.append(path + [(x2, y2)])
+                seen.add((x2, y2))
+    return seen
+
+
 
 def fintention(agent, portes):
 
 # Intention naturellle pour un agent d'aller vers la porte la plus proche
 
+    # Utilise l'algorithme de dijkstra
+    vect=portes[0].positionCentre - agent.position
+    vect_norm = np.linalg.norm(vect)
     
-    vect=portes[0].positionCentre-agent.position
-    vect=vect/np.linalg.norm(vect)
     
-    for porte in portes[1:-1]:
+    for porte in portes[1:]:
         
-        vect_test=portes.positionCentre-agent.position
-        vect_test=vect_test/np.linalg.norm(vect_test)
+        vect_test = porte.positionCentre - agent.position
+        vect_test_norm = np.linalg.norm(vect_test)
         
-        if np.linalg.norm(vect_test) < np.linalg.norm(vect):
+        
+        if vect_test_norm < vect_norm:
             
             vect = vect_test
-        
+    
+    vect = vect / vect_norm
     return agent.vitesseBase * np.array(vect)
+
+
     
 def Dpotentiel(r,sigma,epsilon):
 #La dérivée du potentiel de répulsion
@@ -340,8 +368,7 @@ def test_location(agent,zone):
         if(agent.position[1] >= lim_y_min and agent.position[1]<= lim_y_max):
             return True
     return False
-
-
+    
 def agents_in_zone_count(agents,zone):
     #fonction qui permet de compter combien d'agents sont présents dans la zone parmis tous ceux de la liste
     nb_agent_in_zone = 0
@@ -380,6 +407,11 @@ def points_list(sommet_1, sommet_2):
 
 
 
+    
+
+
+
+
 # Premier exemple
 
 Lx = 20
@@ -404,15 +436,19 @@ luc = Agent(np.array([8., 2.]), 1., sigma, epsilon, 'luc')
 #======================= test de la fonction test location ====================
 test_zone = [[5.0,8.0],[10.0,6.0]]
 agent_test = Agent(np.array([7.0,7.0]),1., sigma, epsilon, 'agent_1')
-agent_test_2 = Agent(np.array([7.50,7.0]),1., sigma, epsilon, 'agent_2')
-agent_test_3 = Agent(np.array([7.0,7.1]),1., sigma, epsilon, 'agent_3')
+agent_test_2 = Agent(np.array([12.0,7.0]),1., sigma, epsilon, 'agent_2')
+agent_test_3 = Agent(np.array([7.0,3.0]),1., sigma, epsilon, 'agent_3')
 agent_test_4 = Agent(np.array([1.0,9.0]),1., sigma, epsilon, 'agent_4')
 position_1 = test_location(agent_test,test_zone)
 position_2 = test_location(agent_test_2,test_zone)
 position_3 = test_location(agent_test_3,test_zone)
 position_4 = test_location(agent_test_4,test_zone)
+<<<<<<< HEAD
 
 #==============================================================================
+=======
+#=======================================================================================
+>>>>>>> 57478e589f135fec69f8cf9da328ef8e08767a0a
 
 # Murs d'exemple
 largeur_porte = 2 * 0.90
@@ -451,8 +487,12 @@ def generer_table(debut, fin):
     return [table1_1, table1_2, table1_3, table1_4]
     
 tables = []
+eleves = []
 for i in range(7):
     tables = tables + generer_table([1.5 + 0.25, 2.5 + 3 + i], [1.5 + 0.25 + 10, i + 2.9 + 3])
+    for j in range(16):
+        eleve = Agent(np.array([2 + j * 0.6,6.1 + i]), 1., sigma, epsilon*2, 'marie')
+        eleves.append(eleve)
     
 
 
@@ -461,18 +501,18 @@ obstacles = murs + tables
 #==============================================================================
 
 
-porte = Porte([20,0], [20,3])
+porte1 = Porte([0,1.25], [2,1.25])
+porte2 = Porte([11.5,1.25], [13.5,1.25])
 
 
-agents = [marie, nirina, luc]
+agents = eleves
 
-for i in range(0):
-    agents.append(random_agent(Lx, Ly, sigma, epsilon))
     
-portes = [porte]
+portes = [porte1, porte2]
 #obstacles=build_walls(Lx,Ly,portes)
 
 salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
+
 
 
 fig, ax = plt.subplots(1,1)
@@ -487,11 +527,9 @@ print(dt)
 for i in range(nombreT):
 
     salleTest.maj()
-    print("nbr agents dans la salle = " + repr(agents_in_zone_count(salleTest.agents,[[0,3],[13.52,11.11]])))
-    
 
     salleTest.afficher(fig, ax)
-#    time.sleep(0.001)
+    #time.sleep(0.001)
     print(i)
     
 
