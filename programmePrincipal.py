@@ -369,6 +369,19 @@ def test_location(agent,zone):
             return True
     return False
     
+def agents_in_zone_count(agents,zone):
+    #fonction qui permet de compter combien d'agents sont présents dans la zone parmis tous ceux de la liste
+    nb_agent_in_zone = 0
+    for agent in agents:
+        in_zone = test_location(agent,zone)
+        if(in_zone == True):
+            nb_agent_in_zone += 1
+    return nb_agent_in_zone    
+
+    
+
+
+
 
     
 
