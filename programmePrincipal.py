@@ -340,7 +340,16 @@ def test_location(agent,zone):
         if(agent.position[1] >= lim_y_min and agent.position[1]<= lim_y_max):
             return True
     return False
-    
+
+
+def agents_in_zone_count(agents,zone):
+    #fonction qui permet de compter combien d'agents sont présents dans la zone parmis tous ceux de la liste
+    nb_agent_in_zone = 0
+    for agent in agents:
+        in_zone = test_location(agent,zone)
+        if(in_zone == True):
+            nb_agent_in_zone += 1
+    return nb_agent_in_zone    
 
     
 
@@ -372,13 +381,14 @@ luc = Agent(np.array([8., 2.]), 1., sigma, epsilon, 'luc')
 #======================= test de la fonction test location =============================
 test_zone = [[5.0,8.0],[10.0,6.0]]
 agent_test = Agent(np.array([7.0,7.0]),1., sigma, epsilon, 'agent_1')
-agent_test_2 = Agent(np.array([12.0,7.0]),1., sigma, epsilon, 'agent_2')
-agent_test_3 = Agent(np.array([7.0,3.0]),1., sigma, epsilon, 'agent_3')
+agent_test_2 = Agent(np.array([7.50,7.0]),1., sigma, epsilon, 'agent_2')
+agent_test_3 = Agent(np.array([7.0,7.1]),1., sigma, epsilon, 'agent_3')
 agent_test_4 = Agent(np.array([1.0,9.0]),1., sigma, epsilon, 'agent_4')
 position_1 = test_location(agent_test,test_zone)
 position_2 = test_location(agent_test_2,test_zone)
 position_3 = test_location(agent_test_3,test_zone)
 position_4 = test_location(agent_test_4,test_zone)
+
 #=======================================================================================
 
 # Murs d'exemple
@@ -454,9 +464,11 @@ print(dt)
 for i in range(nombreT):
 
     salleTest.maj()
+    print("nbr agents dans la salle = " + repr(agents_in_zone_count(salleTest.agents,[[0,3],[13.52,11.11]])))
+    
 
     salleTest.afficher(fig, ax)
-    #time.sleep(0.001)
+#    time.sleep(0.001)
     print(i)
     
 
