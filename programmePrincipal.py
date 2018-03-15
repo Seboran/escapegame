@@ -15,6 +15,7 @@ import matplotlib.animation as animation
 import time
 import scipy
 import random
+import collections
 
 plt.close("all")
 
@@ -80,13 +81,19 @@ class Environnement:
         self.Nx = Nx
         self.Ny = Ny
         self.dt = dt
-        self.grille = Grille(Nx, Ny)
+        self.grid = np.zeros([Nx, Ny])
         
         def meter_to_int(x, N, L):
             return int(x * N / L) # dégueulasse
         
         for obstacle in obstacles:
-            # TODO
+            # Remplis la grille avec les murs
+            debut, fin = obstacle
+            x1, y1 = debut
+            x2, y2 = fin
+            # On rajoute à chaque case où il y a un mur un entier non nul
+            for x in range(meter_to_int(x1), meter_to_int(x2) + 1):
+                for y in range(meter_to_int(y1), meter_to_int(y2) + 1):
             2;
             
         for agent in agents:
@@ -97,6 +104,7 @@ class Environnement:
             
         for porte in portes:
             #Todo
+            
             
             2;
             
@@ -249,12 +257,27 @@ def build_walls(Lx,Ly,portes):
             
     return liste_murs
 
+def bfs(Nx, Ny, grid, start, goal):
+    queue = collections.deque([[start]])
+    seen = set([start])
+    while queue:
+        path = queue.popleft()
+        x, y = path[-1]
+        if grid[y][x] == goal:
+            return path
+        for x2, y2 in ((x+1,y), (x-1,y), (x,y+1), (x,y-1)):
+            if 0 <= x2 < Nx and 0 <= y2 < Ny and grid[y2][x2] != 1 and (x2, y2) not in seen:
+                queue.append(path + [(x2, y2)])
+                seen.add((x2, y2))
+    return seen
+
+
 
 def fintention(agent, portes):
 
 # Intention naturellle pour un agent d'aller vers la porte la plus proche
 
-    
+    # Utilise l'algorithme de dijkstra
     vect=portes[0].positionCentre-agent.position
     vect=vect/np.linalg.norm(vect)
     
@@ -268,6 +291,8 @@ def fintention(agent, portes):
             vect = vect_test
         
     return agent.vitesseBase * np.array(vect)
+
+
     
 def Dpotentiel(r,sigma,epsilon):
 #La dérivée du potentiel de répulsion
@@ -412,7 +437,7 @@ portes = [porte]
 
 salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
 
-
+print(bfs(Nx, Ny, salleTest.grid, [0, 0], [2, 2]))
 fig, ax = plt.subplots(1,1)
 
 fig.show()
