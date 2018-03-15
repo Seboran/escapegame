@@ -483,7 +483,7 @@ Nx = 400
 Ny = 400
 
 
-nombreT = 50
+nombreT = 50000
 T = 120
 dt = T/nombreT
 
