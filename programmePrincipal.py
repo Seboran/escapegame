@@ -332,16 +332,17 @@ def random_agent(Lx, Ly, sigma, epsilon):
 
 # Premier exemple
 
-Lx = 10.
-Ly = 15.
+Lx = 10
+Ly = 15
 Nx = 400
 Ny = 400
 
-dt = 0.001
+nombreT = 50
+dt = T/nombreT
+dt = 0.1
 sigma = 0.1
 epsilon = 1.0
-T = 5
-nombreT = int(T/dt)
+T = 120
 
 
 
@@ -360,12 +361,22 @@ mur2 = Obstacle([[1,14], [9,14]])
 mur3 = Obstacle([[9,14], [9,1]])
 mur4 = Obstacle([[9,1], [6,1]])
  
-#table1_1 = Obstacle([[6, 10], [6, 11]]) 
-#table1_2 = Obstacle([[6, 11], [4, 11]])
-#table1_3 = Obstacle([[4, 11], [4, 10]])
-#table1_4 = Obstacle([[4, 10], [6, 10]])
-# 
-obstacles = [mur0, mur1, mur2, mur3, mur4]#, table1_1, table1_2, table1_3, table1_4]
+table1_1 = Obstacle([[6, 10], [6, 11]]) 
+table1_2 = Obstacle([[6, 11], [4, 11]])
+table1_3 = Obstacle([[4, 11], [4, 10]])
+table1_4 = Obstacle([[4, 10], [6, 10]])
+
+def generer_table(debut, fin):
+    x1, y1 = debut
+    x2, y2 = fin
+    table1_1 = Obstacle([[x1, y1], [x1, y2]]) 
+    table1_2 = Obstacle([[x1, y2], [x2, y2]])
+    table1_3 = Obstacle([[x2, y2], [x2, y1]])
+    table1_4 = Obstacle([[x2, y1], [x1, y1]])
+    return [table1_1, table1_2, table1_3, table1_4]
+    
+table1 = generer_table([4, 10], [8, 11])
+obstacles = [mur0, mur1, mur2, mur3, mur4] + table1
 #==============================================================================
 
 
@@ -397,7 +408,8 @@ for i in range(nombreT):
     salleTest.maj()
 
     salleTest.afficher(fig, ax)
-    #time.sleep(0.001)
+    time.sleep(0.001)
+    print(i)
     
 
 
