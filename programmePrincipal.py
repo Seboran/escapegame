@@ -16,6 +16,12 @@ import time
 import scipy
 import random
 import collections
+try:
+    from tqdm import tqdm as progress
+except:
+    print("Please install tqdm for loading bar display")
+    def progress(range):
+        return range
 
 plt.close("all")
 
@@ -31,11 +37,13 @@ class Agent:
         self.sigma = sigma
         self.epsilon = epsilon
         self.vitesse = np.array([0, 0])
+        self.numbers = []
 
         self.position = positionBase
         r = lambda: random.randint(0,255)
         if color == '':
-            self.color = ('#%02X%02X%02X' % (r(),r(),r()))
+            self.numbers = (r(),r(),r())
+            self.color = ('#%02X%02X%02X' % self.numbers)
         else:
             self.color = color
         self.alive = True
@@ -70,7 +78,8 @@ class Grille:
     def __init__(self, Nx, Ny): 
         self.tab = [[0]*Nx for _ in range(Ny)]
     
-        
+def meter_to_int(x, N, L):
+    return int(x * N / L) # dégueulasse     
 class Environnement:
     def __init__(self, Lx, Ly, Nx, Ny, dt, obstacles, agents, portes):
         self.obstacles = obstacles
@@ -83,18 +92,27 @@ class Environnement:
         self.dt = dt
         self.grille = Grille(Nx, Ny)
         
-        def meter_to_int(x, N, L):
-            return int(x * N / L) # dégueulasse
+        
         
         for obstacle in obstacles:
             # Remplis la grille avec les murs
-#            debut, fin = obstacle
-#            x1, y1 = debut
-#            x2, y2 = fin
-            # On rajoute à chaque case où il y a un mur un entier non nul
-#            for x in range(meter_to_int(x1), meter_to_int(x2) + 1):
-#                for y in range(meter_to_int(y1), meter_to_int(y2) + 1):
-            2;
+            debut, fin = obstacle.sommets
+            x1, y1 = debut
+            x2, y2 = fin
+            x1 = meter_to_int(x1, Nx, Lx)
+            x2 = meter_to_int(x2, Nx, Lx)
+            y1 = meter_to_int(y1, Ny, Ly)
+            y2 = meter_to_int(y2, Ny, Ly)
+            fill_mur = points_list([x1, y1], [x2, y2])
+            
+            for x, y in fill_mur:
+                
+                
+                # On rajoute une case là où il y a un mur
+                # Vérifier que la case ne quitte pas la grille
+                if x >= 0 and x < Nx and y >= 0 and y < Ny:
+                    self.grille.tab[x][y] = 1
+           
             
         for agent in agents:
             nx = meter_to_int(agent.position[0], Nx, Lx)
@@ -118,7 +136,7 @@ class Environnement:
         def maj_vitesse_agents():
             #========================================================
             def maj_vitesse_agent_intention(agent):
-                force = fintention(agent, self.portes)
+                force = fintention(agent, self.portes, Nx, Ny, self.grille.tab)
                 agent.vitesse += force
             #========================================================
             #========================================================
@@ -157,6 +175,24 @@ class Environnement:
         maj_vitesse_agents()
         maj_position_agents()
         maj_agents_alive()
+        
+    def export_agents(self, t):
+        for agent in agents:
+            yield [agent.numbers, agent.position, t]
+    def maj_turns(self, N):
+        
+        yield list(self.export_agents(0))
+        progress_bar = progress(range(N))
+        for i in progress_bar:
+            
+            salleTest.maj()
+            
+            nombre_agents = agents_in_zone_count(self.agents, [[0, 3], [13.52, 11.11]])
+            
+            
+            progress_bar.set_description(desc = "Reste " + str(nombre_agents) + " agents")
+            yield list(self.export_agents(i + 1))
+            
     
         
     def afficher(self, figure, axe):
@@ -280,7 +316,7 @@ def bfs(Nx, Ny, grid, start, goal):
 
 
 
-def fintention(agent, portes):
+def fintention(agent, portes, Nx, Ny, grille = None):
 
 # Intention naturellle pour un agent d'aller vers la porte la plus proche
 
@@ -301,8 +337,23 @@ def fintention(agent, portes):
             porte_cible = porte
     
     vect = vect / vect_norm
-    #bfs(Nx, Ny, grid, agent.position, porte_cible)
-    
+    '''if grille != None:
+        x, y = agent.position
+        x = meter_to_int(x, Nx, Lx)
+        y = meter_to_int(y, Ny, Ly)
+        x_porte, y_porte = porte_cible.positionCentre
+        x_porte = meter_to_int(x_porte, Nx, Lx)
+        y_porte = meter_to_int(y_porte, Ny, Ly)
+        try:
+            path = bfs(Nx, Ny, grille, [x, y], [x_porte, y_porte])
+            first_cell = np.array(path[0])
+            vect = first_cell - agent.position
+        except:
+            1;
+        
+        '''
+        
+        
     return agent.vitesseBase * np.array(vect)
 
 
@@ -400,18 +451,20 @@ def points_list(sommet_1, sommet_2):
         for i in range(1,diff):
             tmp = [sommet_1[0],mini + i]
             pt_list.append(tmp)
+            
         pt_list.append([sommet_1[0],maxi])
         
+        
     elif(sommet_1[1] == sommet_2[1]):
-        #les deux points sont alignés horizontalemen
+        #les deux points sont alignés horizontalement
         maxi = max(sommet_1[0],sommet_2[0])
         mini = min(sommet_1[0],sommet_2[0])
         diff = maxi - mini
-        pt_list.append([sommet_1[1], mini])
+        pt_list.append([mini, sommet_2[1]])
         for i in range(1,diff):
-            tmp = [sommet_1[1],mini + i]
+            tmp = [mini + i, sommet_1[1]]
             pt_list.append(tmp)
-        pt_list.append([sommet_1[1],maxi])
+        pt_list.append([maxi, sommet_1[1]])
     return pt_list
     
 
@@ -496,10 +549,10 @@ def generer_table(debut, fin):
     
 tables = []
 eleves = []
-for i in range(3):
+for i in range(5):
     tables = tables + generer_table([1.5 + 0.25, 2.5 + 3 + i], [1.5 + 0.25 + 10, i + 2.9 + 3])
-    for j in range(6):
-        eleve = Agent(np.array([2 + j * 0.6,6.1 + i]), 1., sigma, epsilon*2, 'marie')
+    for j in range(16):
+        eleve = Agent(np.array([2 + j * 0.6,6.1 + i]), 1., sigma, epsilon*2)
         eleves.append(eleve)
     
 
@@ -523,26 +576,28 @@ salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
 
 
 
-fig, ax = plt.subplots(1,1)
-
-fig.show()
-
 
 
 salleTest.afficher(fig, ax) 
 
 print(dt)
-for i in range(nombreT):
+agents_positions = list(salleTest.maj_turns(nombreT))
 
-    salleTest.maj()
-
-    salleTest.afficher(fig, ax)
-    print(agents_in_zone_count(agents, [[0, 3], [13.52, 11.11]]))
-    #time.sleep(0.001)
-    print(i)
+import csv
+with open('agents_positions.csv', 'w') as csvfile:
+    spamwriter = csv.writer(csvfile, lineterminator = '\n')
+    for agents_n in agents_positions:
+        for number, pos, t in agents_n:
+            #print(number, pos, t)
+            x, y = pos
+            spamwriter.writerow(list(number)+ [x, y, t])
     
 
 
+
+fig, ax = plt.subplots(1,1)
+
+fig.show()
 
 
 
