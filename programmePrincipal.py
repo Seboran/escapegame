@@ -81,26 +81,26 @@ class Environnement:
         self.Nx = Nx
         self.Ny = Ny
         self.dt = dt
-        self.grid = np.zeros([Nx, Ny])
+        self.grille = Grille(Nx, Ny)
         
         def meter_to_int(x, N, L):
             return int(x * N / L) # dégueulasse
         
         for obstacle in obstacles:
             # Remplis la grille avec les murs
-            debut, fin = obstacle
-            x1, y1 = debut
-            x2, y2 = fin
+#            debut, fin = obstacle
+#            x1, y1 = debut
+#            x2, y2 = fin
             # On rajoute à chaque case où il y a un mur un entier non nul
-            for x in range(meter_to_int(x1), meter_to_int(x2) + 1):
-                for y in range(meter_to_int(y1), meter_to_int(y2) + 1):
+#            for x in range(meter_to_int(x1), meter_to_int(x2) + 1):
+#                for y in range(meter_to_int(y1), meter_to_int(y2) + 1):
             2;
             
         for agent in agents:
             nx = meter_to_int(agent.position[0], Nx, Lx)
             ny = meter_to_int(agent.position[1], Ny, Ly)
             
-            self.grille.tab[nx][ny] = numero_agent
+            #self.grille.tab[nx][ny] = numero_agent
             
         for porte in portes:
             #Todo
@@ -278,18 +278,21 @@ def fintention(agent, portes):
 # Intention naturellle pour un agent d'aller vers la porte la plus proche
 
     # Utilise l'algorithme de dijkstra
-    vect=portes[0].positionCentre-agent.position
-    vect=vect/np.linalg.norm(vect)
+    vect=portes[0].positionCentre - agent.position
+    vect_norm = np.linalg.norm(vect)
     
-    for porte in portes[1:-1]:
+    
+    for porte in portes[1:]:
         
-        vect_test=portes.positionCentre-agent.position
-        vect_test=vect_test/np.linalg.norm(vect_test)
+        vect_test = porte.positionCentre - agent.position
+        vect_test_norm = np.linalg.norm(vect_test)
         
-        if np.linalg.norm(vect_test) < np.linalg.norm(vect):
+        
+        if vect_test_norm < vect_norm:
             
             vect = vect_test
-        
+    
+    vect = vect / vect_norm
     return agent.vitesseBase * np.array(vect)
 
 
@@ -443,8 +446,12 @@ def generer_table(debut, fin):
     return [table1_1, table1_2, table1_3, table1_4]
     
 tables = []
+eleves = []
 for i in range(7):
     tables = tables + generer_table([1.5 + 0.25, 2.5 + 3 + i], [1.5 + 0.25 + 10, i + 2.9 + 3])
+    for j in range(16):
+        eleve = Agent(np.array([2 + j * 0.6,6.1 + i]), 1., sigma, epsilon*2, 'marie')
+        eleves.append(eleve)
     
 
 
@@ -453,20 +460,20 @@ obstacles = murs + tables
 #==============================================================================
 
 
-porte = Porte([20,0], [20,3])
+porte1 = Porte([0,1.25], [2,1.25])
+porte2 = Porte([11.5,1.25], [13.5,1.25])
 
 
-agents = [marie, nirina, luc]
+agents = eleves
 
-for i in range(0):
-    agents.append(random_agent(Lx, Ly, sigma, epsilon))
     
-portes = [porte]
+portes = [porte1, porte2]
 #obstacles=build_walls(Lx,Ly,portes)
 
 salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
 
-print(bfs(Nx, Ny, salleTest.grid, [0, 0], [2, 2]))
+
+
 fig, ax = plt.subplots(1,1)
 
 fig.show()
