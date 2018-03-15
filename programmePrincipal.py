@@ -168,9 +168,9 @@ class Environnement:
                 
         def maj_agents_alive():
             for agent in self.agents:
-                for porte in self.portes:
-                    if agent.distance(porte) < seuil_porte:
-                        agent.alive = False
+                
+                if not(test_location(agent, [[0, 3], [13.52, 11.11]])):
+                    agent.alive = False
 
         maj_vitesse_agents()
         maj_position_agents()
@@ -188,7 +188,7 @@ class Environnement:
             salleTest.maj()
             
             nombre_agents = agents_in_zone_count(self.agents, [[0, 3], [13.52, 11.11]])
-            
+            test_location
             
             progress_bar.set_description(desc = "Reste " + str(nombre_agents) + " agents")
             yield list(self.export_agents(i + 1))
