@@ -16,6 +16,9 @@ import time
 import scipy
 import random
 import collections
+import csv
+import os
+from IO import *
 try:
     from tqdm import tqdm as progress
 except:
@@ -483,8 +486,8 @@ Nx = 400
 Ny = 400
 
 
-nombreT = 50000
-T = 120
+nombreT = 10000
+T = 20
 dt = T/nombreT
 
 
@@ -582,8 +585,7 @@ salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
 print(dt)
 agents_positions = list(salleTest.maj_turns(nombreT))
 
-import csv
-import os
+
 i = 0
 filename = "agents_positions.csv"
 while os.path.exists(filename):
@@ -600,9 +602,9 @@ with open(filename, 'w') as csvfile:
 
 
 
-fig, ax = plt.subplots(1,1)
-salleTest.afficher(fig, ax) 
-fig.show()
+read_csv(filename, Lx, Ly)
+plt.show()
+
 
 
 
