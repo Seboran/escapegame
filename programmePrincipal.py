@@ -47,7 +47,7 @@ class Agent:
         if type(element) == Agent:
             return np.linalg.norm(self.position - element.position)
         if type(element) == Porte:
-            return np.linalg.norm(self.position - porte.positionCentre)
+            return np.linalg.norm(self.position - element.positionCentre)
 
         
 class Porte:
@@ -443,12 +443,6 @@ position_1 = test_location(agent_test,test_zone)
 position_2 = test_location(agent_test_2,test_zone)
 position_3 = test_location(agent_test_3,test_zone)
 position_4 = test_location(agent_test_4,test_zone)
-<<<<<<< HEAD
-
-#==============================================================================
-=======
-#=======================================================================================
->>>>>>> 57478e589f135fec69f8cf9da328ef8e08767a0a
 
 # Murs d'exemple
 largeur_porte = 2 * 0.90
