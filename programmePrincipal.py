@@ -354,7 +354,7 @@ Ly = 11.11
 Nx = 400
 Ny = 400
 
-nombreT = 50
+nombreT = 500
 dt = T/nombreT
 dt = 0.1
 sigma = 0.1
@@ -385,14 +385,23 @@ position_4 = test_location(agent_test_4,test_zone)
 largeur_porte = 2 * 0.90
 #==============================================================================
 
+murs = []
+murs.append(Obstacle([[0,3],[0,11.11]]))
+murs.append(Obstacle([[0,11.11], [13.52, 11.11]]))
+murs.append(Obstacle([[13.52, 11.11], [13.52,3]]))
 
-mur0 = Obstacle([[0,3],[0,11.11]])
-mur1 = Obstacle([[0,11.11], [13.52, 11.11]])
-mur2 = Obstacle([[13.52, 11.11], [13.52,3]])
-
-mur3 = Obstacle([[13.52 - 2 * largeur_porte, 3], [2 * largeur_porte,3]])
+murs.append(Obstacle([[13.52 - largeur_porte, 3], [largeur_porte,3]]))
+murs.append(Obstacle([[largeur_porte,4], [largeur_porte,3]]))
+murs.append(Obstacle([[13.52 - largeur_porte, 4], [13.52 - largeur_porte,3]]))
 
 
+murs.append(Obstacle([[13.52, 3 + 1], [13.52 - 0.25, 3 + 1]]))
+murs.append(Obstacle([[13.52 - 0.25, 3 + 1], [13.52 - 0.25, 3]]))
+murs.append(Obstacle([[13.52, 3], [13.52 - 0.25, 3]]))
+
+murs.append(Obstacle([[0, 3 + 1], [0 + 0.25, 3 + 1]]))
+murs.append(Obstacle([[0 + 0.25, 3 + 1], [0 + 0.25, 3]]))
+murs.append(Obstacle([[0, 3], [0 + 0.25, 3]]))
  
 table1_1 = Obstacle([[6, 10], [6, 11]]) 
 table1_2 = Obstacle([[6, 11], [4, 11]])
@@ -408,8 +417,14 @@ def generer_table(debut, fin):
     table1_4 = Obstacle([[x2, y1], [x1, y1]])
     return [table1_1, table1_2, table1_3, table1_4]
     
-table1 = generer_table([4, 10], [8, 11])
-obstacles = [mur0, mur1, mur2, mur3] + table1
+tables = []
+for i in range(7):
+    tables = tables + generer_table([1.5 + 0.25, 2.5 + 3 + i], [1.5 + 0.25 + 10, i + 2.9 + 3])
+    
+
+
+
+obstacles = murs + tables
 #==============================================================================
 
 
