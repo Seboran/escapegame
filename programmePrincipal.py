@@ -328,6 +328,23 @@ def f_repulsion_obstacle(agent, obstacle):
 def random_agent(Lx, Ly, sigma, epsilon):
     return Agent(np.array([1 + 8 * random.random(), 1 + 13 * random.random()]), 1, sigma, epsilon)
 
+def test_location(agent,zone):
+    #la variable zone correspond à une liste de deux vecteurs qui permettent de former un carré (point angle en haut à gauche et point angle en bas à droite)
+    #indique si l'agent est localisée dans la zone carrée
+    lim_x_min = min(zone[0][0],zone[1][0])
+    lim_x_max = max(zone[0][0],zone[1][0])
+    lim_y_min = min(zone[0][1],zone[1][1])
+    lim_y_max = max(zone[0][1],zone[1][1])    
+    
+    if(agent.position[0] >= lim_x_min and agent.position[0]<= lim_x_max):   
+        if(agent.position[1] >= lim_y_min and agent.position[1]<= lim_y_max):
+            return True
+    return False
+    
+
+    
+
+
 
 
 # Premier exemple
@@ -351,6 +368,18 @@ marie = Agent(np.array([5,5]), 1., sigma, epsilon*2, 'marie')
 nirina = Agent(np.array([np.sqrt(2.)/2. * 5., np.sqrt(2.)/2. * 5.]), 1., sigma, epsilon/2, 'nirina')
 luc = Agent(np.array([8., 2.]), 1., sigma, epsilon, 'luc')
 
+
+#======================= test de la fonction test location =============================
+test_zone = [[5.0,8.0],[10.0,6.0]]
+agent_test = Agent(np.array([7.0,7.0]),1., sigma, epsilon, 'agent_1')
+agent_test_2 = Agent(np.array([12.0,7.0]),1., sigma, epsilon, 'agent_2')
+agent_test_3 = Agent(np.array([7.0,3.0]),1., sigma, epsilon, 'agent_3')
+agent_test_4 = Agent(np.array([1.0,9.0]),1., sigma, epsilon, 'agent_4')
+position_1 = test_location(agent_test,test_zone)
+position_2 = test_location(agent_test_2,test_zone)
+position_3 = test_location(agent_test_3,test_zone)
+position_4 = test_location(agent_test_4,test_zone)
+#=======================================================================================
 
 # Murs d'exemple
 largeur_porte = 2 * 0.90
