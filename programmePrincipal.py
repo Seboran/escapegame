@@ -332,8 +332,8 @@ def random_agent(Lx, Ly, sigma, epsilon):
 
 # Premier exemple
 
-Lx = 10
-Ly = 15
+Lx = 20
+Ly = 11.11
 Nx = 400
 Ny = 400
 
@@ -353,13 +353,17 @@ luc = Agent(np.array([8., 2.]), 1., sigma, epsilon, 'luc')
 
 
 # Murs d'exemple
-
+largeur_porte = 2 * 0.90
 #==============================================================================
-mur0 = Obstacle([[4,1],[1,1]])
-mur1 = Obstacle([[1,1], [1,14]])
-mur2 = Obstacle([[1,14], [9,14]])
-mur3 = Obstacle([[9,14], [9,1]])
-mur4 = Obstacle([[9,1], [6,1]])
+
+
+mur0 = Obstacle([[0,3],[0,11.11]])
+mur1 = Obstacle([[0,11.11], [13.52, 11.11]])
+mur2 = Obstacle([[13.52, 11.11], [13.52,3]])
+
+mur3 = Obstacle([[13.52 - 2 * largeur_porte, 3], [2 * largeur_porte,3]])
+
+
  
 table1_1 = Obstacle([[6, 10], [6, 11]]) 
 table1_2 = Obstacle([[6, 11], [4, 11]])
@@ -376,11 +380,11 @@ def generer_table(debut, fin):
     return [table1_1, table1_2, table1_3, table1_4]
     
 table1 = generer_table([4, 10], [8, 11])
-obstacles = [mur0, mur1, mur2, mur3, mur4] + table1
+obstacles = [mur0, mur1, mur2, mur3] + table1
 #==============================================================================
 
 
-porte = Porte([4,0], [6,0])
+porte = Porte([20,0], [20,3])
 
 
 agents = [marie, nirina, luc]
@@ -408,7 +412,7 @@ for i in range(nombreT):
     salleTest.maj()
 
     salleTest.afficher(fig, ax)
-    time.sleep(0.001)
+    #time.sleep(0.001)
     print(i)
     
 
