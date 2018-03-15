@@ -388,8 +388,32 @@ def agents_in_zone_count(agents,zone):
             nb_agent_in_zone += 1
     return nb_agent_in_zone    
 
-    
 
+def points_list(sommet_1, sommet_2):
+    pt_list = []
+    if(sommet_1[0] == sommet_2[0]):
+        #les deux points sont alignés verticalement
+        maxi = max(sommet_1[1],sommet_2[1])
+        mini = min(sommet_1[1],sommet_2[1])
+        diff = maxi - mini
+        pt_list.append([sommet_1[0], mini])
+        for i in range(1,diff):
+            tmp = [sommet_1[0],mini + i]
+            pt_list.append(tmp)
+        pt_list.append([sommet_1[0],maxi])
+        
+    elif(sommet_1[1] == sommet_2[1]):
+        #les deux points sont alignés horizontalemen
+        maxi = max(sommet_1[0],sommet_2[0])
+        mini = min(sommet_1[0],sommet_2[0])
+        diff = maxi - mini
+        pt_list.append([sommet_1[1], mini])
+        for i in range(1,diff):
+            tmp = [sommet_1[1],mini + i]
+            pt_list.append(tmp)
+        pt_list.append([sommet_1[1],maxi])
+    return pt_list
+    
 
 
 
@@ -405,9 +429,11 @@ Ly = 11.11
 Nx = 400
 Ny = 400
 
+
 nombreT = 50000
 T = 120
 dt = T/nombreT
+
 
 sigma = 0.1
 epsilon = 1.0
@@ -421,7 +447,7 @@ nirina = Agent(np.array([np.sqrt(2.)/2. * 5., np.sqrt(2.)/2. * 5.]), 1., sigma, 
 luc = Agent(np.array([8., 2.]), 1., sigma, epsilon, 'luc')
 
 
-#======================= test de la fonction test location =============================
+#======================= test de la fonction test location ====================
 test_zone = [[5.0,8.0],[10.0,6.0]]
 agent_test = Agent(np.array([7.0,7.0]),1., sigma, epsilon, 'agent_1')
 agent_test_2 = Agent(np.array([12.0,7.0]),1., sigma, epsilon, 'agent_2')
@@ -431,7 +457,6 @@ position_1 = test_location(agent_test,test_zone)
 position_2 = test_location(agent_test_2,test_zone)
 position_3 = test_location(agent_test_3,test_zone)
 position_4 = test_location(agent_test_4,test_zone)
-#=======================================================================================
 
 # Murs d'exemple
 largeur_porte = 2 * 0.90
