@@ -2,3 +2,5 @@ agents_positions*.csv
 .vscode/settings.json
 __pycache__/IO.cpython-35.pyc
 __pycache__/programmePrincipal.cpython-35.pyc
+agents_positions*.mp4
+__pycache__/*
