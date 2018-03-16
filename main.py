@@ -9,6 +9,10 @@ Created on Thu Nov 30 10:29:35 2017
 
 # Je rajoute quelques lignes de commentaires
 
+import matplotlib
+# Force matplotlib to not use any Xwindows backend.
+matplotlib.use('Agg')
+
 import numpy as np
 import matplotlib.pylab as plt
 import matplotlib.animation as animation
