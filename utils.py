@@ -1,39 +1,19 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Nov 30 10:29:35 2017
-
-@author: nirin
-"""
-
-# test
-
-# Je rajoute quelques lignes de commentaires
-
-import numpy as np
-import matplotlib.pylab as plt
-import matplotlib.animation as animation
 import time
 import scipy
 import random
 import collections
-import csv
-import os
-from IO import *
+import numpy as np
+from utils import *
+from forces import *
+import matplotlib.pylab as plt
+import matplotlib.animation as animation
+
 try:
     from tqdm import tqdm as progress
 except:
     print("Please install tqdm for loading bar display")
     def progress(range):
         return range
-
-plt.close("all")
-
-
-
-numero_agent = 1
-numero_porte = -1
-seuil_porte = 0.1
-        
 class Agent:
     def __init__(self, positionBase, vitesseBase, sigma, epsilon, nom = '', color = ''):
         self.vitesseBase = vitesseBase
@@ -81,8 +61,7 @@ class Grille:
     def __init__(self, Nx, Ny): 
         self.tab = [[0]*Nx for _ in range(Ny)]
     
-def meter_to_int(x, N, L):
-    return int(x * N / L) # dégueulasse     
+   
 class Environnement:
     def __init__(self, Lx, Ly, Nx, Ny, dt, obstacles, agents, portes):
         self.obstacles = obstacles
@@ -139,7 +118,7 @@ class Environnement:
         def maj_vitesse_agents():
             #========================================================
             def maj_vitesse_agent_intention(agent):
-                force = fintention(agent, self.portes, Nx, Ny, self.grille.tab)
+                force = fintention(agent, self.portes, self.Nx, self.Ny, self.grille.tab)
                 agent.vitesse += force
             #========================================================
             #========================================================
@@ -180,15 +159,16 @@ class Environnement:
         maj_agents_alive()
         
     def export_agents(self, t):
-        for agent in agents:
+        for agent in self.agents:
             yield [agent.numbers, agent.position, t]
+
     def maj_turns(self, N):
         
         yield list(self.export_agents(0))
         progress_bar = progress(range(N))
         for i in progress_bar:
             
-            salleTest.maj()
+            self.maj()
             
             nombre_agents = agents_in_zone_count(self.agents, [[0, 3], [13.52, 11.11]])
             test_location
@@ -204,13 +184,13 @@ class Environnement:
         color = []
         axe.set_xlim(0, self.Lx)
         axe.set_ylim(0, self.Ly)
-        for agent in self.agents:
+        '''for agent in self.agents:
             x.append(agent.position[0])
             y.append(agent.position[1])
             color.append(agent.color)
             
         
-        axe.scatter(x, y, c = color)
+        axe.scatter(x, y, c = color)'''
         for obstacle in self.obstacles:
 
             x = []
@@ -296,127 +276,12 @@ def build_walls(Lx,Ly,portes):
             
     return liste_murs
 
-def bfs(Nx, Ny, grid, start, goal):
-    ''' Prend des coordonnés cases sans unités
-    Ne pas mettre de floats ou de mètres'''
-    queue = collections.deque([[start]])
-    
-    
-    
-    grid_seen = np.zeros([Nx, Ny])
-    
-    grid_seen[start[0], start[1]] = 1
-    while queue:
-        path = queue.popleft()
-        x, y = path[-1]
-        if x == goal[0] and y == goal[1]:
-            return path
-        for x2, y2 in ((x+1,y), (x-1,y), (x,y+1), (x,y-1)):
-            if 0 <= x2 < Nx and 0 <= y2 < Ny and grid[x2][y2] != 1 and grid_seen[x2, y2] != 1:
-                queue.append(path + [[x2, y2]])
-                grid_seen[x2, y2] = 1
-    raise Exception
 
 
 
-def fintention(agent, portes, Nx, Ny, grille = None):
+def meter_to_int(x, N, L):
+    return int(x * N / L) # dégueulasse  
 
-# Intention naturellle pour un agent d'aller vers la porte la plus proche
-
-    # Utilise l'algorithme de dijkstra
-    vect=portes[0].positionCentre - agent.position
-    vect_norm = np.linalg.norm(vect)
-    porte_cible = portes[0]
-    
-    for porte in portes[1:]:
-        
-        vect_test = porte.positionCentre - agent.position
-        vect_test_norm = np.linalg.norm(vect_test)
-        
-        
-        if vect_test_norm < vect_norm:
-            
-            vect = vect_test
-            porte_cible = porte
-    
-    vect = vect / vect_norm
-    '''if grille != None:
-        x, y = agent.position
-        x = meter_to_int(x, Nx, Lx)
-        y = meter_to_int(y, Ny, Ly)
-        x_porte, y_porte = porte_cible.positionCentre
-        x_porte = meter_to_int(x_porte, Nx, Lx)
-        y_porte = meter_to_int(y_porte, Ny, Ly)
-        try:
-            path = bfs(Nx, Ny, grille, [x, y], [x_porte, y_porte])
-            first_cell = np.array(path[0])
-            vect = first_cell - agent.position
-        except:
-            1;
-        
-        '''
-        
-        
-    return agent.vitesseBase * np.array(vect)
-
-
-    
-def Dpotentiel(r,sigma,epsilon):
-#La dérivée du potentiel de répulsion
-    
-    if r < 2**(1/6)*sigma:
-        
-        return 4*epsilon*(-12*(sigma/r)**12/r+6*(sigma/r)**6/r)
-
-    return 0
-    
-def fagent(agent1,agent2):
-#Force de répulsion entre deux agents
-
-    sigma=agent1.sigma
-    epsilon=agent1.epsilon
-    r = agent1.distance(agent2)
-    
-    vecteur_unitaire = (agent1.position - agent2.position) / r
-    
-    if agent2.alive:
-        amplitude = -Dpotentiel(r,sigma*2,epsilon)
-    else:
-        amplitude = 0.
-    
-    return amplitude * vecteur_unitaire
-    
-def f_repulsion_obstacle(agent, obstacle):
-    K, L = obstacle.sommets
-    A = agent.position
-    KL = L - K
-    KA = A - K
-    
-    d = np.dot(KL, KA)
-    theta = d / np.linalg.norm(KL)**2
-    KH = theta * KL
-    H = K + KH
-    
-    #print(theta)
-    if theta < 0.:
-        H = K
-    elif theta > 1.:
-        H = L
-    #print(H)
-    HA = -agent.position + H 
-    #print(HA)
-    distanceHA = np.linalg.norm(HA)
-    HA_u = HA / distanceHA
-    
-    #print(distanceHA)
-    potentiel = Dpotentiel(distanceHA, agent.sigma, agent.epsilon)
-    force = HA_u * potentiel
-
-    #print(potentiel)
-    #print(force)
-    return force
-    
-    
 def random_agent(Lx, Ly, sigma, epsilon):
     return Agent(np.array([1 + 8 * random.random(), 1 + 13 * random.random()]), 1, sigma, epsilon)
 
@@ -471,76 +336,6 @@ def points_list(sommet_1, sommet_2):
     return pt_list
     
 
-
-
-    
-
-
-
-
-# Premier exemple
-
-Lx = 20
-Ly = 11.11
-Nx = 400
-Ny = 400
-
-
-nombreT = 10000
-T = 20
-dt = T/nombreT
-
-
-sigma = 0.1
-epsilon = 1.0
-
-
-
-
-
-marie = Agent(np.array([5,5]), 1., sigma, epsilon*2, 'marie')
-nirina = Agent(np.array([np.sqrt(2.)/2. * 5., np.sqrt(2.)/2. * 5.]), 1., sigma, epsilon/2, 'nirina')
-luc = Agent(np.array([8., 2.]), 1., sigma, epsilon, 'luc')
-
-
-#======================= test de la fonction test location ====================
-test_zone = [[5.0,8.0],[10.0,6.0]]
-agent_test = Agent(np.array([7.0,7.0]),1., sigma, epsilon, 'agent_1')
-agent_test_2 = Agent(np.array([12.0,7.0]),1., sigma, epsilon, 'agent_2')
-agent_test_3 = Agent(np.array([7.0,3.0]),1., sigma, epsilon, 'agent_3')
-agent_test_4 = Agent(np.array([1.0,9.0]),1., sigma, epsilon, 'agent_4')
-position_1 = test_location(agent_test,test_zone)
-position_2 = test_location(agent_test_2,test_zone)
-position_3 = test_location(agent_test_3,test_zone)
-position_4 = test_location(agent_test_4,test_zone)
-
-# Murs d'exemple
-largeur_porte = 2 * 0.90
-#==============================================================================
-
-murs = []
-murs.append(Obstacle([[0,3],[0,11.11]]))
-murs.append(Obstacle([[0,11.11], [13.52, 11.11]]))
-murs.append(Obstacle([[13.52, 11.11], [13.52,3]]))
-
-murs.append(Obstacle([[13.52 - largeur_porte, 3], [largeur_porte,3]]))
-murs.append(Obstacle([[largeur_porte,4], [largeur_porte,3]]))
-murs.append(Obstacle([[13.52 - largeur_porte, 4], [13.52 - largeur_porte,3]]))
-
-
-murs.append(Obstacle([[13.52, 3 + 1], [13.52 - 0.25, 3 + 1]]))
-murs.append(Obstacle([[13.52 - 0.25, 3 + 1], [13.52 - 0.25, 3]]))
-murs.append(Obstacle([[13.52, 3], [13.52 - 0.25, 3]]))
-
-murs.append(Obstacle([[0, 3 + 1], [0 + 0.25, 3 + 1]]))
-murs.append(Obstacle([[0 + 0.25, 3 + 1], [0 + 0.25, 3]]))
-murs.append(Obstacle([[0, 3], [0 + 0.25, 3]]))
- 
-table1_1 = Obstacle([[6, 10], [6, 11]]) 
-table1_2 = Obstacle([[6, 11], [4, 11]])
-table1_3 = Obstacle([[4, 11], [4, 10]])
-table1_4 = Obstacle([[4, 10], [6, 10]])
-
 def generer_table(debut, fin):
     x1, y1 = debut
     x2, y2 = fin
@@ -549,65 +344,25 @@ def generer_table(debut, fin):
     table1_3 = Obstacle([[x2, y2], [x2, y1]])
     table1_4 = Obstacle([[x2, y1], [x1, y1]])
     return [table1_1, table1_2, table1_3, table1_4]
+
+
+def bfs(Nx, Ny, grid, start, goal):
+    ''' Prend des coordonnés cases sans unités
+    Ne pas mettre de floats ou de mètres'''
+    queue = collections.deque([[start]])
     
-tables = []
-eleves = []
-for i in range(5):
-    tables = tables + generer_table([1.5 + 0.25, 2.5 + 3 + i], [1.5 + 0.25 + 10, i + 2.9 + 3])
-    for j in range(16):
-        eleve = Agent(np.array([2 + j * 0.6,6.1 + i]), 1., sigma, epsilon*2)
-        eleves.append(eleve)
     
-
-
-
-obstacles = murs + tables
-#==============================================================================
-
-
-porte1 = Porte([0,1.25], [2,1.25])
-porte2 = Porte([11.5,1.25], [13.5,1.25])
-
-
-agents = eleves
-
     
-portes = [porte1, porte2]
-#obstacles=build_walls(Lx,Ly,portes)
-
-salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
-
-
-
-
-
-
-print(dt)
-agents_positions = list(salleTest.maj_turns(nombreT))
-
-
-i = 0
-filename = "agents_positions.csv"
-while os.path.exists(filename):
-    filename = "agents_positions_" + str(i) + ".csv"
-    i += 1
-with open(filename, 'w') as csvfile:
-    spamwriter = csv.writer(csvfile, lineterminator = '\n')
-    for agents_n in agents_positions:
-        for number, pos, t in agents_n:
-            #print(number, pos, t)
-            x, y = pos
-            spamwriter.writerow(list(number)+ [x, y, t])
+    grid_seen = np.zeros([Nx, Ny])
     
-
-
-
-read_csv(filename, Lx, Ly)
-plt.show()
-
-
-
-
-
-
-
+    grid_seen[start[0], start[1]] = 1
+    while queue:
+        path = queue.popleft()
+        x, y = path[-1]
+        if x == goal[0] and y == goal[1]:
+            return path
+        for x2, y2 in ((x+1,y), (x-1,y), (x,y+1), (x,y-1)):
+            if 0 <= x2 < Nx and 0 <= y2 < Ny and grid[x2][y2] != 1 and grid_seen[x2, y2] != 1:
+                queue.append(path + [[x2, y2]])
+                grid_seen[x2, y2] = 1
+    raise Exception
