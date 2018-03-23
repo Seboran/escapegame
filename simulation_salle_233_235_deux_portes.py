@@ -5,7 +5,7 @@ Created on Sat Mar 24 00:07:26 2018
 @author: marie_000
 """
 
-from Fonctions_classes import *
+from utils import Obstacle
 
 def Salle_233_235_deux_portes(x0,y0,largeur_porte,espace_x_porte,espace_x,espace_y,largeur_bureau_Gs,longueur_bureau_Gs):
     murs_grd_salle = []
