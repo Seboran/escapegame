@@ -129,7 +129,7 @@ def Salle_233_235_occupation(x0,y0,largeur_porte,espace_x_porte,espace_x,espace_
         for i in rangs_gauche:
             if(i !=4):
                 x = x0+0.1+largeur_porte+espace_x_porte + largeur_bureau + (i-1)*(largeur_bureau + espace_x)
-                eleve = Agent(np.array([x+espace_agent_table,y0+j*longueur_bureau]), 1., sigma, epsilon*2, 'eleve')
+                eleve = Agent(np.array([x+espace_agent_table,y0+j*longueur_bureau]), 1., sigma, epsilon*2, 'eleve')                
                 eleves.append(eleve)
         for i in rangs_gauche:
              x = x0+0.1+largeur_porte+espace_x_porte + largeur_bureau + (i-1)*(largeur_bureau + espace_x)
@@ -159,7 +159,6 @@ def Salle_233_235_occupation(x0,y0,largeur_porte,espace_x_porte,espace_x,espace_
             y =  y0 + espace_y + (i-1)*(largeur_bureau + espace_y) + largeur_bureau
             eleve = Agent(np.array([x,y + espace_agent_table]), 1., sigma, epsilon*2, 'eleve')
             eleves.append(eleve)
-            
-        return eleves
+    return eleves
     
 
