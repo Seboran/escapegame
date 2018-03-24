@@ -23,7 +23,7 @@ from utils import Environnement, Agent, Obstacle, Porte
 from IO import *
 from forces import *
 from utils import *
-
+from simulation_salle_233_235 import *
 
 
 plt.close("all")
@@ -99,6 +99,32 @@ agents = eleves
     
 portes = [porte1, porte2]
 #obstacles=build_walls(Lx,Ly,portes)
+
+
+#==============================================================================
+#Simulation de la Grande salle 233/235 (Gs)
+#==============================================================================
+largeur_porte_Gs = 0.8
+x0 = 1.0 #donne le décalage en x par rapport au bord de la fenêtre
+y0 = 3.0  #donne le décalage en y par rapport au bord de la fenêtre
+espace_x_porte = 0.7 #espace entre la première porte et la première table
+espace_x = 0.85 #espace qui separe dans la direction x deux tables
+espace_y = 1.1 #espace qui separe dans la direction y deux tables
+largeur_bureau_Gs = 0.5
+longueur_bureau_Gs = 1.25
+#simulation de la salle
+Gd_salle_2_portes = Salle_233_235_deux_portes(x0,y0,largeur_porte_Gs,espace_x_porte,espace_x,espace_y,largeur_bureau_Gs,longueur_bureau_Gs)
+#ajout des portes
+porte_Gs1 = Porte([x0+0.1,y0-1], [x0+0.1+largeur_porte_Gs,y0-1])
+porte_Gs2 = Porte([x0+0.1+largeur_porte_Gs+5.8,y0-1], [x0+0.1+5.8+2*largeur_porte_Gs,y0-1])
+Portes_Gs = [porte_Gs1,porte_Gs2]
+#ajout des agents
+espace_agent_table = 0.17 #distance entre le bord de la table et l'élève
+eleves_Gs = Salle_233_235_full_occupation(x0,y0,largeur_porte_Gs,espace_x_porte,espace_x,espace_y,largeur_bureau_Gs,longueur_bureau_Gs,espace_agent_table,sigma,epsilon)
+
+grande_salleTest = Environnement(14,10,Nx,Ny,dt,Gd_salle_2_portes,eleves_Gs,Portes_Gs)
+#==============================================================================
+
 
 salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
 
