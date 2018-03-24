@@ -112,17 +112,20 @@ espace_x = 0.85 #espace qui separe dans la direction x deux tables
 espace_y = 1.1 #espace qui separe dans la direction y deux tables
 largeur_bureau_Gs = 0.5
 longueur_bureau_Gs = 1.25
+
 #simulation de la salle
-Gd_salle_2_portes = Salle_233_235_deux_portes(x0,y0,largeur_porte_Gs,espace_x_porte,espace_x,espace_y,largeur_bureau_Gs,longueur_bureau_Gs)
-#ajout des portes
-porte_Gs1 = Porte([x0+0.1,y0-1], [x0+0.1+largeur_porte_Gs,y0-1])
-porte_Gs2 = Porte([x0+0.1+largeur_porte_Gs+5.8,y0-1], [x0+0.1+5.8+2*largeur_porte_Gs,y0-1])
-Portes_Gs = [porte_Gs1,porte_Gs2]
+Gd_salle_2_portes = Salle_233_235_deux_portes(x0,y0,largeur_porte_Gs) #les portes sont préenregistrées dans cette fonction
+Portes_Gs = Gd_salle_2_portes[1] #on récupère les portes
+Gd_salle_2_portes = Gd_salle_2_portes[1]
+#ajout des tables dans la salle
+Gd_salle_tables = tables_salle_233_235(x0,y0,largeur_porte_Gs,espace_x_porte,espace_x,espace_y,largeur_bureau_Gs,longueur_bureau_Gs)
 #ajout des agents
 espace_agent_table = 0.17 #distance entre le bord de la table et l'élève
-eleves_Gs = Salle_233_235_full_occupation(x0,y0,largeur_porte_Gs,espace_x_porte,espace_x,espace_y,largeur_bureau_Gs,longueur_bureau_Gs,espace_agent_table,sigma,epsilon)
-
-grande_salleTest = Environnement(14,10,Nx,Ny,dt,Gd_salle_2_portes,eleves_Gs,Portes_Gs)
+rangs_gauche = [1,2,3,4]
+rangs_droite = [1,2,3]
+eleves_Gs = Salle_233_235_occupation(x0,y0,largeur_porte_Gs,espace_x_porte,espace_x,espace_y,largeur_bureau_Gs,
+                                  longueur_bureau_Gs,espace_agent_table,rangs_gauche,rangs_droite,sigma,epsilon)
+grande_salleTest = Environnement(14,10,Nx,Ny,dt,Gd_salle_2_portes+Gd_salle_tables,eleves_Gs,Portes_Gs)
 #==============================================================================
 
 
