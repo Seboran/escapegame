@@ -167,42 +167,71 @@ def Salle_233_235_occupation(x0,y0,largeur_porte,espace_x_porte,espace_x,espace_
 #==============================================================================
 #Fonctions de simulation de l'amphi
 #==============================================================================
-def Amphi_deux_portes(x0,y0,largeur_porte): 
+def Amphi(x0,y0,largeur_porte,ouvertures): 
+    ouvertures.sort()
     murs_amphi = []
+    Portes =  []
     murs_amphi.append(Obstacle([[x0,y0],[x0+0.4, y0]]))
-    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte,y0],[x0+0.4+largeur_porte+9.6,y0]]))    
-    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte+9.6+largeur_porte,y0],[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0]]))
-    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0],[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0+11.8]]))
-    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0+11.8],[x0,y0+11.8]]))
+    if(len(ouvertures) >= 1 and ouvertures[0] == 1):
+        #la première demi-porte est ouverte
+        if(len(ouvertures) >=2 and ouvertures[1] == 2):
+            #la deuxième demi-porte est ouverte
+            murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte,y0],[x0+0.4+2*largeur_porte+9.6,y0]]))
+            porte_1 = Porte([x0+0.4,y0-1], [x0+0.4+2*largeur_porte,y0-1])
+            Portes.append(porte_1)
+            del ouvertures[0]
+            del ouvertures[0]
+        else:#seule la première demi_porte est ouverte
+            murs_amphi.append(Obstacle([[x0+0.4+largeur_porte,y0],[x0+0.4+2*largeur_porte+9.6,y0]]))
+            porte_1 = Porte([x0+0.4,y0-1], [x0+0.4+largeur_porte,y0-1])
+            Portes.append(porte_1)
+            del ouvertures[0]
+    elif(len(ouvertures) >=1 and ouvertures[0] == 2):
+        #la première demi-porte est fermée mais la deuxième est ouverte
+        murs_amphi.append(Obstacle([[x0+0.4,y0],[x0+0.4+largeur_porte,y0]]))
+        murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte,y0],[x0+0.4+2*largeur_porte+9.6,y0]]))
+        porte_1 = Porte([x0+0.4+largeur_porte,y0-1], [x0+0.4+2*largeur_porte,y0-1])
+        Portes.append(porte_1)
+        del ouvertures[0]
+    else:
+        #les deux premières demi-portes sont fermées
+        murs_amphi.append(Obstacle([[x0+0.4,y0],[x0+0.4+2*largeur_porte+9.6,y0]]))
+    if(len(ouvertures) >=1 and ouvertures[0] == 3):
+        #la troisième demi-porte est ouverte
+        if(len(ouvertures) >= 2 and ouvertures[1] == 4):
+            #la quatrième demi-porte est ouverte
+            murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte+9.6+2*largeur_porte,y0],[x0+0.4+2*largeur_porte+9.6+2*largeur_porte+0.2,y0]]))
+            porte_2 = Porte([x0+0.4+2*largeur_porte+9.6,y0-1], [x0+0.4+9.6+4*largeur_porte,y0-1])
+            Portes.append(porte_2)
+            del ouvertures[0]
+            del ouvertures[0]
+        else: #seule la troisième demi-porte est ouverte
+            murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte+9.6+largeur_porte,y0],[x0+0.4+2*largeur_porte+9.6+2*largeur_porte+0.2,y0]]))
+            porte_2 = Porte([x0+0.4+2*largeur_porte+9.6,y0-1], [x0+0.4+9.6+3*largeur_porte,y0-1])
+            Portes.append(porte_2)
+            del ouvertures[0]
+    elif(len(ouvertures) >=1 and ouvertures[0] == 4):
+        #la troisième demi-porte est fermée mais la quatrième est ouverte
+        murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte+9.6,y0],[x0+0.4+2*largeur_porte+9.6+largeur_porte,y0]]))
+        murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte+9.6+2*largeur_porte,y0],[x0+0.4+2*largeur_porte+9.6+2*largeur_porte+0.2,y0]]))
+        porte_2 = Porte([x0+0.4+3*largeur_porte+9.6,y0-1], [x0+0.4+9.6+4*largeur_porte,y0-1])
+        Portes.append(porte_2)
+        del ouvertures[0]
+    else:
+        #les deux dernières demi-portes sont fermées
+        murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte+9.6,y0],[x0+0.4+2*largeur_porte+9.6+2*largeur_porte+0.2,y0]]))            
+            
+    murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte+9.6+2*largeur_porte+0.2,y0],[x0+0.4+2*largeur_porte+9.6+2*largeur_porte+0.2,y0+11.8]]))
+    murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte+9.6+2*largeur_porte+0.2,y0+11.8],[x0,y0+11.8]]))
     murs_amphi.append(Obstacle([[x0,y0+11.8],[x0,y0]]))
+    murs_amphi.append(Obstacle([[x0+0.4,y0],[x0+0.4,y0+0.8]]))
+    murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte,y0],[x0+0.4+2*largeur_porte,y0+0.8]]))
+    murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte+9.6,y0],[x0+0.4+2*largeur_porte+9.6,y0+0.8]]))
+    murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte+9.6+2*largeur_porte,y0],[x0+0.4+2*largeur_porte+9.6+2*largeur_porte,y0+0.8]]))
     
-    porte_1= Porte([x0+0.4,y0-1], [x0+0.4+largeur_porte,y0-1])
-    porte_2 = Porte([x0+0.4+largeur_porte+9.6,y0-1], [x0+0.4+9.6+2*largeur_porte,y0-1])
-    return murs_amphi,[porte_1,porte_2]
+    return murs_amphi,Portes
 
-def Amphi_porte_gauche(x0,y0,largeur_porte):
-    #on considère que seule la porte gauche de l'amphi est ouverte
-    murs_amphi = []
-    murs_amphi.append(Obstacle([[x0,y0],[x0+0.4, y0]]))
-    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte,y0],[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0]]))
-    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0],[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0+11.8]]))
-    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0+11.8],[x0,y0+11.8]]))
-    murs_amphi.append(Obstacle([[x0,y0+11.8],[x0,y0]]))
-    
-    porte_1= Porte([x0+0.4,y0-1], [x0+0.4+largeur_porte,y0-1])
-    return murs_amphi,[porte_1]
 
-def Amphi_porte_droite(x0,y0,largeur_porte): 
-    #on considère que seule la porte droite de l'amphi est ouverte
-    murs_amphi = []
-    murs_amphi.append(Obstacle([[x0,y0],[x0+0.4+largeur_porte+9.6,y0]]))    
-    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte+9.6+largeur_porte,y0],[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0]]))
-    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0],[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0+11.8]]))
-    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0+11.8],[x0,y0+11.8]]))
-    murs_amphi.append(Obstacle([[x0,y0+11.8],[x0,y0]]))
-    
-    porte_2 = Porte([x0+0.4+largeur_porte+9.6,y0-1], [x0+0.4+9.6+2*largeur_porte,y0-1])
-    return murs_amphi,[porte_2]
 
 def table_amphi(x0,y0,espace_x,espace_y,nbr_rangees,largeur_table,longueur_table,espace_table):
     tables = []
