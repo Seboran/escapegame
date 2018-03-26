@@ -34,20 +34,31 @@ espace_table_eleve = 0.19 #espace entre le bord de la table et l'élève
 portes_ouvertes = [1,2,3,4] 
 occupation_ligne = range(nbr_rangees) 
 occupation_colonne = range(16) 
-
 #================================================================================
 #simulation 2 : 4 demi-portes ouvertes - moitié amphi rempli (3 premières lignes)
 #=================================================================================
-portes_ouvertes = [1,2,3,4] #demi-portes ouvertes numérotées de gauche à droite de 1 à 4
-occupation_ligne = [0,1,2] #vecteur indiquant dans quelle ligne ligne de table on veut mettre des élèves (de 0 à nbr_rangées)
-occupation_colonne = range(16) #vecteur indiquant dans à quelle position d'une grande table on veut mettre des élèves (de 0 à 16)
-
+portes_ouvertes = [1,2,3,4] 
+occupation_ligne = [0,1,2] 
+occupation_colonne = range(16) 
 #================================================================================
 #simulation 3 : 4 demi-portes ouvertes - moitié amphi rempli (3 dernières lignes)
 #=================================================================================
-portes_ouvertes = [1,2,3,4] #demi-portes ouvertes numérotées de gauche à droite de 1 à 4
-occupation_ligne = [3,4,5] #vecteur indiquant dans quelle ligne ligne de table on veut mettre des élèves (de 0 à nbr_rangées)
-occupation_colonne = range(16) #vecteur indiquant dans à quelle position d'une grande table on veut mettre des élèves (de 0 à 16)
+portes_ouvertes = [1,2,3,4] 
+occupation_ligne = [3,4,5] 
+occupation_colonne = range(16) 
+#================================================================================
+#simulation 4 : 4 demi-portes ouvertes - moitié amphi rempli partie droite
+#=================================================================================
+portes_ouvertes = [1,2,3,4] 
+occupation_ligne = [0,1,2,3,4,5]
+occupation_colonne = range(8) 
+#================================================================================
+#simulation 5 : 4 demi-portes ouvertes - moitié amphi rempli partie centrale
+#=================================================================================
+portes_ouvertes = [1,2,3,4] 
+occupation_ligne = [0,1,2,3,4,5] 
+occupation_colonne = [4,5,6,7,8,9,10,11]
+
 
 
 #============================================================
