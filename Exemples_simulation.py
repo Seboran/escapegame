@@ -58,6 +58,40 @@ occupation_colonne = range(8)
 portes_ouvertes = [1,2,3,4] 
 occupation_ligne = [0,1,2,3,4,5] 
 occupation_colonne = [4,5,6,7,8,9,10,11]
+#================================================================================
+#simulation 6 : 2 demi-portes ouvertes (une de chaque côté) - amphi plein
+#=================================================================================
+portes_ouvertes = [1,3] 
+occupation_ligne = [0,1,2,3,4,5] 
+occupation_colonne = range(16)
+#================================================================================
+#simulation 7 : 2 demi-portes ouvertes (une de chaque côté) - moitié amphi rempli (3 premières lignes)
+#=================================================================================
+portes_ouvertes = [1,3]
+occupation_ligne = [0,1,2]
+occupation_colonne = range(16)
+#================================================================================
+#simulation 8 : 2 demi-portes ouvertes (une de chaque côté) - moitié amphi rempli (3 dernières lignes)
+#=================================================================================
+portes_ouvertes = [1,3]
+occupation_ligne = [3,4,5]
+occupation_colonne = range(16)
+#================================================================================
+#simulation 9 : 2 demi-portes ouvertes (une de chaque côté) - moitié amphi rempli partie droite
+#=================================================================================
+portes_ouvertes = [1,3]
+occupation_ligne = [0,1,2,3,4,5]
+occupation_colonne = range(8) 
+#================================================================================
+#simulation 10 : 2 demi-portes ouvertes (une de chaque côté) - moitié amphi rempli partie centrale
+#=================================================================================
+portes_ouvertes = [1,3]
+occupation_ligne = [0,1,2,3,4,5]
+occupation_colonne = [4,5,6,7,8,9,10,11]
+
+
+
+
 
 
 
