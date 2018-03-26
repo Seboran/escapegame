@@ -23,7 +23,7 @@ from utils import Environnement, Agent, Obstacle, Porte
 from IO import *
 from forces import *
 from utils import *
-from simulation_salle_233_235 import *
+from simulation_salles import *
 
 
 plt.close("all")
@@ -53,40 +53,41 @@ epsilon = 1.0
 # Murs d'exemple
 largeur_porte = 2 * 0.90
 #==============================================================================
+"""Modification de la simulation de l'amphi, voir le fichier de fonctions simulation_salles et le fichier texte qui donne quelques simulations possibles"""
 
-murs = []
-murs.append(Obstacle([[0,3],[0,11.11]]))
-murs.append(Obstacle([[0,11.11], [13.52, 11.11]]))
-murs.append(Obstacle([[13.52, 11.11], [13.52,3]]))
-
-murs.append(Obstacle([[13.52 - largeur_porte, 3], [largeur_porte,3]]))
-murs.append(Obstacle([[largeur_porte,4], [largeur_porte,3]]))
-murs.append(Obstacle([[13.52 - largeur_porte, 4], [13.52 - largeur_porte,3]]))
-
-
-murs.append(Obstacle([[13.52, 3 + 1], [13.52 - 0.25, 3 + 1]]))
-murs.append(Obstacle([[13.52 - 0.25, 3 + 1], [13.52 - 0.25, 3]]))
-murs.append(Obstacle([[13.52, 3], [13.52 - 0.25, 3]]))
-
-murs.append(Obstacle([[0, 3 + 1], [0 + 0.25, 3 + 1]]))
-murs.append(Obstacle([[0 + 0.25, 3 + 1], [0 + 0.25, 3]]))
-murs.append(Obstacle([[0, 3], [0 + 0.25, 3]]))
- 
-
-
-    
-tables = []
-eleves = []
-for i in range(5):
-    tables = tables + generer_table([1.5 + 0.25, 2.5 + 3 + i], [1.5 + 0.25 + 10, i + 2.9 + 3])
-    for j in range(16):
-        eleve = Agent(np.array([2 + j * 0.6,6.1 + i]), 1., sigma, epsilon*2)
-        eleves.append(eleve)
-    
-
-
-
-obstacles = murs + tables
+#murs = []
+#murs.append(Obstacle([[0,3],[0,11.11]]))
+#murs.append(Obstacle([[0,11.11], [13.52, 11.11]]))
+#murs.append(Obstacle([[13.52, 11.11], [13.52,3]]))
+#
+#murs.append(Obstacle([[13.52 - largeur_porte, 3], [largeur_porte,3]]))
+#murs.append(Obstacle([[largeur_porte,4], [largeur_porte,3]]))
+#murs.append(Obstacle([[13.52 - largeur_porte, 4], [13.52 - largeur_porte,3]]))
+#
+#
+#murs.append(Obstacle([[13.52, 3 + 1], [13.52 - 0.25, 3 + 1]]))
+#murs.append(Obstacle([[13.52 - 0.25, 3 + 1], [13.52 - 0.25, 3]]))
+#murs.append(Obstacle([[13.52, 3], [13.52 - 0.25, 3]]))
+#
+#murs.append(Obstacle([[0, 3 + 1], [0 + 0.25, 3 + 1]]))
+#murs.append(Obstacle([[0 + 0.25, 3 + 1], [0 + 0.25, 3]]))
+#murs.append(Obstacle([[0, 3], [0 + 0.25, 3]]))
+# 
+#
+#
+#    
+#tables = []
+#eleves = []
+#for i in range(5):
+#    tables = tables + generer_table([1.5 + 0.25, 2.5 + 3 + i], [1.5 + 0.25 + 10, i + 2.9 + 3])
+#    for j in range(16):
+#        eleve = Agent(np.array([2 + j * 0.6,6.1 + i]), 1., sigma, epsilon*2)
+#        eleves.append(eleve)
+#    
+#
+#
+#
+#obstacles = murs + tables
 #==============================================================================
 
 
