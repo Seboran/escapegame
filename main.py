@@ -53,7 +53,8 @@ epsilon = 1.0
 # Murs d'exemple
 largeur_porte = 2 * 0.90
 #==============================================================================
-"""Modification de la simulation de l'amphi, voir le fichier de fonctions simulation_salles et le fichier texte qui donne quelques simulations possibles"""
+"""Modification de la simulation de l'amphi, voir le fichier de fonctions simulation_salles et le fichier texte qui donne quelques simulations possibles
+(en cours d'écriture)"""
 
 #murs = []
 #murs.append(Obstacle([[0,3],[0,11.11]]))
@@ -91,15 +92,54 @@ largeur_porte = 2 * 0.90
 #==============================================================================
 
 
-porte1 = Porte([0,1.25], [2,1.25])
-porte2 = Porte([11.5,1.25], [13.5,1.25])
-
-
-agents = eleves
-
-    
-portes = [porte1, porte2]
+#porte1 = Porte([0,1.25], [2,1.25])
+#porte2 = Porte([11.5,1.25], [13.5,1.25])
+#
+#
+#agents = eleves
+#
+#    
+#portes = [porte1, porte2]
 #obstacles=build_walls(Lx,Ly,portes)
+
+
+#==============================================================================
+# Simulation possible de l'amphi
+#==============================================================================
+#variables générales utiles à la simulation
+#position de la pièce de l'angle en bas à gauche dans la fenêtre d'affichage
+x0 = 1.0 #décalage en x
+y0 = 3.0 #dacalage en y
+
+
+#variables spécifiques à l'amphi
+largeur_porte = 0.80 #on met la largeur de la demi-porte
+espace_x = 1.9 #esapce entre le mur de l'amphi et le bord gauche des tables 
+espace_y = 2.3 #esapce entre le mur de l'amphi et le bord inférieur des tables
+largeur_table = 0.3 #largueur des tables dans l'amphi
+longueur_table = 9.95 #longueur des tables de l'amphi
+espace_table = 0.6 #esapce entre deux tables dans l'amphi (on considère que les tables sont equidistantes)
+nbr_rangees = 6 #nombre de rangées de tables dans l'amphi
+espace_table_eleve = 0.19 #espace entre le bord de la table et l'élève
+
+
+portes_ouvertes = [1,2,3,4] #demi-portes ouvertes numérotées de gauche à droite de 1 à 4
+occupation_ligne = [0] #vecteur indiquant dans quelle ligne ligne de table on veut mettre des élèves (de 0 à nbr_rangées)
+occupation_colonne = [3] #vecteur indiquant dans à quelle position d'une grande table on veut mettre des élèves (de 0 à 16)
+
+
+murs_amphi = Amphi(x0,y0,largeur_porte,portes_ouvertes)
+portes_amphi = murs_amphi[1]
+murs_amphi = murs_amphi[0]
+tables_amphi = table_amphi(x0,y0,espace_x,espace_y,nbr_rangees,largeur_table,longueur_table,espace_table)
+eleves_amphi = amphi_occupation(x0,y0,espace_x,espace_y,longueur_table,largeur_table,espace_table_eleve,espace_table,occupation_colonne,occupation_ligne,
+                     sigma,epsilon)
+
+
+obstacles = murs_amphi + tables_amphi
+
+salleTest = Environnement(x0+15, y0+10, Nx, Ny, dt, obstacles, eleves_amphi, portes_amphi)
+
 
 
 #==============================================================================
