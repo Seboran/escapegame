@@ -123,9 +123,11 @@ nbr_rangees = 6 #nombre de rangées de tables dans l'amphi
 espace_table_eleve = 0.19 #espace entre le bord de la table et l'élève
 
 
+"""Partie à modifier pour les différentes simulations """
 portes_ouvertes = [1,2,3,4] #demi-portes ouvertes numérotées de gauche à droite de 1 à 4
 occupation_ligne = [0] #vecteur indiquant dans quelle ligne ligne de table on veut mettre des élèves (de 0 à nbr_rangées)
 occupation_colonne = [3] #vecteur indiquant dans à quelle position d'une grande table on veut mettre des élèves (de 0 à 16)
+""" """
 
 
 murs_amphi = Amphi(x0,y0,largeur_porte,portes_ouvertes)
@@ -134,7 +136,8 @@ murs_amphi = murs_amphi[0]
 tables_amphi = table_amphi(x0,y0,espace_x,espace_y,nbr_rangees,largeur_table,longueur_table,espace_table)
 eleves_amphi = amphi_occupation(x0,y0,espace_x,espace_y,longueur_table,largeur_table,espace_table_eleve,espace_table,occupation_colonne,occupation_ligne,
                      sigma,epsilon)
-
+prof = Agent(np.array([x0 + 6.7,y0+0.6]), 1., sigma, epsilon*2, 'prof') 
+eleves_amphi.append(prof)
 
 obstacles = murs_amphi + tables_amphi
 
@@ -171,7 +174,7 @@ grande_salleTest = Environnement(14,10,Nx,Ny,dt,Obstacles_Gd_salle,eleves_Gs,Por
 #==============================================================================
 
 
-salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
+#salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
 
 agents_positions = list(salleTest.maj_turns(nombreT))
 

@@ -242,6 +242,13 @@ def table_amphi(x0,y0,espace_x,espace_y,nbr_rangees,largeur_table,longueur_table
         tables.append(Obstacle([[X0,Y0+i*(largeur_table+espace_table)],[X0,Y0+largeur_table+i*(largeur_table+espace_table)]]))
         tables.append(Obstacle([[X0,Y0+largeur_table+i*(largeur_table+espace_table)],[X0+longueur_table,Y0+largeur_table+i*(largeur_table+espace_table)]]))
         tables.append(Obstacle([[X0+longueur_table,Y0+i*(largeur_table+espace_table)],[X0+longueur_table,Y0+largeur_table+i*(largeur_table+espace_table)]]))
+    
+    #rajout du bureau du prof
+    tables.append(Obstacle([[x0+espace_x+0.25*longueur_table,y0+espace_y/2.0],[x0+espace_x+0.75*longueur_table,y0+espace_y/2.0]]))
+    tables.append(Obstacle([[x0+espace_x+0.25*longueur_table,y0+espace_y/2.0+largeur_table],[x0+espace_x+0.75*longueur_table,y0+espace_y/2.0+largeur_table]]))
+    tables.append(Obstacle([[x0+espace_x+0.25*longueur_table,y0+espace_y/2.0],[x0+espace_x+0.25*longueur_table,y0+espace_y/2.0+largeur_table]]))
+    tables.append(Obstacle([[x0+espace_x+0.75*longueur_table,y0+espace_y/2.0],[x0+espace_x+0.75*longueur_table,y0+espace_y/2.0+largeur_table]]))
+
     return tables
 
 #==============================================================================
