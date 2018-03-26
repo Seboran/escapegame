@@ -88,12 +88,42 @@ occupation_colonne = range(8)
 portes_ouvertes = [1,3]
 occupation_ligne = [0,1,2,3,4,5]
 occupation_colonne = [4,5,6,7,8,9,10,11]
-
-
-
-
-
-
+#================================================================================
+#simulation 11 : 1 grosse porte ouverte - amphi plein
+#=================================================================================
+portes_ouvertes = [1,2]
+occupation_ligne = [0,1,2,3,4,5] 
+occupation_colonne = range(16)
+#================================================================================
+#simulation 12 : 1 grosse porte ouverte - moitié amphi rempli (3 premières lignes)
+#=================================================================================
+portes_ouvertes = [1,2]
+occupation_ligne = [0,1,2] 
+occupation_colonne = range(16)
+#================================================================================
+#simulation 13 : 1 grosse porte ouverte - moitié amphi rempli (3 dernières lignes)
+#=================================================================================
+portes_ouvertes = [1,2]
+occupation_ligne = [3,4,5] 
+occupation_colonne = range(16)
+#================================================================================
+#simulation 14 : 1 grosse porte ouverte - moitié amphi rempli partie droite
+#=================================================================================
+portes_ouvertes = [1,2]
+occupation_ligne = [0,1,2,3,4,5]
+occupation_colonne = range(8)
+#================================================================================
+#simulation 15 : 1 grosse porte ouverte - moitié amphi rempli partie gauche
+#=================================================================================
+portes_ouvertes = [1,2]
+occupation_ligne = [0,1,2,3,4,5]
+occupation_colonne = range(8,16) 
+#================================================================================
+#simulation 16 : 1 grosse porte ouverte - moitié amphi rempli partie centrale
+#=================================================================================
+portes_ouvertes = [1,2]
+occupation_ligne = [0,1,2,3,4,5]
+occupation_colonne = [4,5,6,7,8,9,10,11]
 
 #============================================================
 #Simulation amphi - partie invariable
