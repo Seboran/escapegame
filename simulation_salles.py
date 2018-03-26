@@ -10,7 +10,7 @@ from utils import *
 
 
 #==============================================================================
-#Fonctions de simulation de la pièce
+#Fonctions de simulation de la pièce 233/235
 #==============================================================================
 def Salle_233_235_deux_portes(x0,y0,largeur_porte):
     murs_grd_salle = []
@@ -32,6 +32,7 @@ def Salle_233_235_deux_portes(x0,y0,largeur_porte):
 
 
 def Salle_233_235_porte_gauche(x0,y0,largeur_porte):
+    #on considère que seule la porte gauche de la salle est ouverte
     murs_grd_salle = []
     murs_grd_salle.append(Obstacle([[x0,y0],[x0+0.1,y0]]))
     murs_grd_salle.append(Obstacle([[x0+0.1+largeur_porte,y0],[x0+0.1+largeur_porte+10+largeur_porte,y0]]))
@@ -48,6 +49,7 @@ def Salle_233_235_porte_gauche(x0,y0,largeur_porte):
 
 
 def Salle_233_235_porte_droite(x0,y0,largeur_porte):
+    #on considère que seule la porte droite de la salle est ouverte
     murs_grd_salle = []
     murs_grd_salle.append(Obstacle([[x0,y0],[x0+0.1+largeur_porte+5.8,y0]]))
 
@@ -117,7 +119,7 @@ def tables_salle_233_235(x0,y0,largeur_porte,espace_x_porte,espace_x,espace_y,la
     return tables_Gs
 
 #==============================================================================
-#Fonction de simulation des élèves dans la pièce
+#Fonction de simulation des élèves dans la pièce 233/235
 #==============================================================================
 def Salle_233_235_occupation(x0,y0,largeur_porte,espace_x_porte,espace_x,espace_y,largeur_bureau,
                                   longueur_bureau,espace_agent_table,rangs_gauche,rangs_droite,sigma,epsilon):
@@ -160,5 +162,74 @@ def Salle_233_235_occupation(x0,y0,largeur_porte,espace_x_porte,espace_x,espace_
             eleve = Agent(np.array([x,y + espace_agent_table]), 1., sigma, epsilon*2, 'eleve')
             eleves.append(eleve)
     return eleves
+
+
+#==============================================================================
+#Fonctions de simulation de l'amphi
+#==============================================================================
+def Amphi_deux_portes(x0,y0,largeur_porte): 
+    murs_amphi = []
+    murs_amphi.append(Obstacle([[x0,y0],[x0+0.4, y0]]))
+    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte,y0],[x0+0.4+largeur_porte+9.6,y0]]))    
+    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte+9.6+largeur_porte,y0],[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0]]))
+    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0],[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0+11.8]]))
+    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0+11.8],[x0,y0+11.8]]))
+    murs_amphi.append(Obstacle([[x0,y0+11.8],[x0,y0]]))
     
+    porte_1= Porte([x0+0.4,y0-1], [x0+0.4+largeur_porte,y0-1])
+    porte_2 = Porte([x0+0.4+largeur_porte+9.6,y0-1], [x0+0.4+9.6+2*largeur_porte,y0-1])
+    return murs_amphi,[porte_1,porte_2]
+
+def Amphi_porte_gauche(x0,y0,largeur_porte):
+    #on considère que seule la porte gauche de l'amphi est ouverte
+    murs_amphi = []
+    murs_amphi.append(Obstacle([[x0,y0],[x0+0.4, y0]]))
+    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte,y0],[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0]]))
+    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0],[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0+11.8]]))
+    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0+11.8],[x0,y0+11.8]]))
+    murs_amphi.append(Obstacle([[x0,y0+11.8],[x0,y0]]))
+    
+    porte_1= Porte([x0+0.4,y0-1], [x0+0.4+largeur_porte,y0-1])
+    return murs_amphi,[porte_1]
+
+def Amphi_porte_droite(x0,y0,largeur_porte): 
+    #on considère que seule la porte droite de l'amphi est ouverte
+    murs_amphi = []
+    murs_amphi.append(Obstacle([[x0,y0],[x0+0.4+largeur_porte+9.6,y0]]))    
+    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte+9.6+largeur_porte,y0],[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0]]))
+    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0],[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0+11.8]]))
+    murs_amphi.append(Obstacle([[x0+0.4+largeur_porte+9.6+largeur_porte+0.2,y0+11.8],[x0,y0+11.8]]))
+    murs_amphi.append(Obstacle([[x0,y0+11.8],[x0,y0]]))
+    
+    porte_2 = Porte([x0+0.4+largeur_porte+9.6,y0-1], [x0+0.4+9.6+2*largeur_porte,y0-1])
+    return murs_amphi,[porte_2]
+
+def table_amphi(x0,y0,espace_x,espace_y,nbr_rangees,largeur_table,longueur_table,espace_table):
+    tables = []
+    for i in range(nbr_rangees):
+        X0 = x0+espace_x
+        Y0 = y0+espace_y
+        tables.append(Obstacle([[X0,Y0+i*(largeur_table+espace_table)],[X0+longueur_table,Y0+i*(largeur_table+espace_table)]]))
+        tables.append(Obstacle([[X0,Y0+i*(largeur_table+espace_table)],[X0,Y0+largeur_table+i*(largeur_table+espace_table)]]))
+        tables.append(Obstacle([[X0,Y0+largeur_table+i*(largeur_table+espace_table)],[X0+longueur_table,Y0+largeur_table+i*(largeur_table+espace_table)]]))
+        tables.append(Obstacle([[X0+longueur_table,Y0+i*(largeur_table+espace_table)],[X0+longueur_table,Y0+largeur_table+i*(largeur_table+espace_table)]]))
+    return tables
+
+#==============================================================================
+#Fonction de simulation des élèves dans l'amphi
+#==============================================================================
+def amphi_occupation(x0,y0,espace_x,espace_y,longueur_table,largeur_table,espace_table_eleve,espace_table,occupation_colonne,occupation_ligne,
+                     sigma,epsilon):
+    
+    eleves = []
+    X0 = x0+espace_x
+    Y0 = y0+espace_y
+    position = (longueur_table/16)/2
+    for i in occupation_colonne:
+        print("colonne" + repr(i))
+        for j in occupation_ligne:
+            print("ligne" + repr(j))
+            eleve = Agent(np.array([X0+position+2*i*position,Y0+largeur_table+espace_table_eleve+j*(espace_table+largeur_table)]), 1., sigma, epsilon*2, 'eleve')                
+            eleves.append(eleve)
+    return eleves
 
