@@ -124,6 +124,25 @@ occupation_colonne = range(8,16)
 portes_ouvertes = [1,2]
 occupation_ligne = [0,1,2,3,4,5]
 occupation_colonne = [4,5,6,7,8,9,10,11]
+#================================================================================
+#simulation 17 : 1 grosse porte ouverte - une personne sur deux (identique d'une ligne à l'autre)
+#=================================================================================
+portes_ouvertes = [1,2] #à modifier si on veut
+occupation_ligne = [0,1,2,3,4,5]
+occupation_colonne = [1,3,5,7,9,11,13,15]
+#================================================================================
+#simulation 18 : 1 grosse porte ouverte - une personne sur deux (alternance entre ligne)
+#=================================================================================
+portes_ouvertes = [1,2] #à modifier si on veut
+occupation_ligne_1 = [0,2,4]
+occupation_colonne_1 = [1,3,5,7,9,11,13,15]
+occupation_ligne_2 = [1,3,5]
+occupation_colonne_2 = [2,4,6,8,10,12,14]
+#modification de la simulation des élèves
+eleves_amphi_1 = amphi_occupation(x0,y0,espace_x,espace_y,longueur_table,largeur_table,espace_table_eleve,espace_table,occupation_colonne_1,occupation_ligne_1,sigma,epsilon)
+eleves_amphi_2 =  amphi_occupation(x0,y0,espace_x,espace_y,longueur_table,largeur_table,espace_table_eleve,espace_table,occupation_colonne_2,occupation_ligne_2,sigma,epsilon)
+eleves_amphi = eleves_amphi_1 + eleves_amphi_2
+
 
 #============================================================
 #Simulation amphi - partie invariable
