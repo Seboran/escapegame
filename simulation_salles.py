@@ -221,9 +221,9 @@ def Amphi(x0,y0,largeur_porte,ouvertures):
         #les deux dernières demi-portes sont fermées
         murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte+9.6,y0],[x0+0.4+2*largeur_porte+9.6+2*largeur_porte+0.2,y0]]))            
             
-    murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte+9.6+2*largeur_porte+0.2,y0],[x0+0.4+2*largeur_porte+9.6+2*largeur_porte+0.2,y0+11.8]]))
-    murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte+9.6+2*largeur_porte+0.2,y0+11.8],[x0,y0+11.8]]))
-    murs_amphi.append(Obstacle([[x0,y0+11.8],[x0,y0]]))
+    murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte+9.6+2*largeur_porte+0.2,y0],[x0+0.4+2*largeur_porte+9.6+2*largeur_porte+0.2,y0+8.1]]))
+    murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte+9.6+2*largeur_porte+0.2,y0+8.1],[x0,y0+8.1]]))
+    murs_amphi.append(Obstacle([[x0,y0+8.1],[x0,y0]]))
     murs_amphi.append(Obstacle([[x0+0.4,y0],[x0+0.4,y0+0.8]]))
     murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte,y0],[x0+0.4+2*largeur_porte,y0+0.8]]))
     murs_amphi.append(Obstacle([[x0+0.4+2*largeur_porte+9.6,y0],[x0+0.4+2*largeur_porte+9.6,y0+0.8]]))
