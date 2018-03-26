@@ -12,58 +12,38 @@ from utils import *
 #==============================================================================
 #Fonctions de simulation de la pièce 233/235
 #==============================================================================
-def Salle_233_235_deux_portes(x0,y0,largeur_porte):
+def Salle_233_235(x0,y0,largeur_porte,ouvertures):
+    ouvertures.sort()
+    Portes =  []
     murs_grd_salle = []
     murs_grd_salle.append(Obstacle([[x0,y0],[x0+0.1,y0]]))
-    murs_grd_salle.append(Obstacle([[x0+0.1+largeur_porte,y0],[x0+0.1+largeur_porte+5.8,y0]]))
-    murs_grd_salle.append(Obstacle([[x0+0.1+5.8+2*largeur_porte,y0],[x0+0.1+5.8+2*largeur_porte+4.2,y0]]))
+    if(len(ouvertures)>=1 and ouvertures[0] == 1):
+        #la première porte est ouverte
+        murs_grd_salle.append(Obstacle([[x0+0.1+largeur_porte,y0],[x0+0.1+largeur_porte+5.8,y0]]))
+        murs_grd_salle.append(Obstacle([[x0+0.1,y0],[x0+0.1,y0+0.8]]))
+        porte_1 = Porte([x0+0.1,y0-1], [x0+0.1+largeur_porte,y0-1])
+        Portes.append(porte_1)
+        del ouvertures[0]
+    else :
+        #la première porte est fermée
+        murs_grd_salle.append(Obstacle([[x0+0.1,y0],[x0+0.1+largeur_porte+5.8,y0]]))
+    if(len(ouvertures)>=1 and ouvertures[0] == 2):
+        #la deuxième porte est ouverte
+        murs_grd_salle.append(Obstacle([[x0+0.1+5.8+2*largeur_porte,y0],[x0+0.1+5.8+2*largeur_porte+4.2,y0]]))
+        murs_grd_salle.append(Obstacle([[x0+0.1+largeur_porte+5.8,y0],[x0+0.1+largeur_porte+5.8,y0+0.8]]))
+        porte_2 = Porte([x0+0.1+largeur_porte+5.8,y0-1], [x0+0.1+5.8+2*largeur_porte,y0-1])
+        Portes.append(porte_2)
+        del ouvertures[0]
+    else:
+        #la deuxième porte est fermée
+        murs_grd_salle.append(Obstacle([[x0+0.1+5.8,y0],[x0+0.1+5.8+2*largeur_porte+4.2,y0]]))
+        
     murs_grd_salle.append(Obstacle([[x0+0.1+5.8+2*largeur_porte+4.2,y0],[x0+0.1+5.8+2*largeur_porte+4.2,y0+5.8]]))
     murs_grd_salle.append(Obstacle([[x0,y0],[x0,y0+5.8]]))
-    murs_grd_salle.append(Obstacle([[x0,y0+5.8],[x0+0.1+5.8+2*largeur_porte+4.2,y0+5.8]]))
-    murs_grd_salle.append(Obstacle([[x0+0.1,y0],[x0+0.1,y0+0.8]]))
-    murs_grd_salle.append(Obstacle([[x0+0.1+largeur_porte+5.8,y0],[x0+0.1+largeur_porte+5.8,y0+0.8]]))
+    murs_grd_salle.append(Obstacle([[x0,y0+5.8],[x0+0.1+5.8+2*largeur_porte+4.2,y0+5.8]]))   
     murs_grd_salle.append(Obstacle([[x0+5.9,y0+5.8],[x0+5.9,y0+5.6]]))
     
-    #simulation des portes
-    porte_1 = Porte([x0+0.1,y0-1], [x0+0.1+largeur_porte,y0-1])
-    porte_2 = Porte([x0+0.1+largeur_porte+5.8,y0-1], [x0+0.1+5.8+2*largeur_porte,y0-1])
-    return murs_grd_salle, [porte_1,porte_2]
-
-
-
-def Salle_233_235_porte_gauche(x0,y0,largeur_porte):
-    #on considère que seule la porte gauche de la salle est ouverte
-    murs_grd_salle = []
-    murs_grd_salle.append(Obstacle([[x0,y0],[x0+0.1,y0]]))
-    murs_grd_salle.append(Obstacle([[x0+0.1+largeur_porte,y0],[x0+0.1+largeur_porte+10+largeur_porte,y0]]))
-    murs_grd_salle.append(Obstacle([[x0+0.1+5.8+2*largeur_porte+4.2,y0],[x0+0.1+5.8+2*largeur_porte+4.2,y0+5.8]]))
-    murs_grd_salle.append(Obstacle([[x0,y0],[x0,y0+5.8]]))
-    murs_grd_salle.append(Obstacle([[x0,y0+5.8],[x0+0.1+5.8+2*largeur_porte+4.2,y0+5.8]]))
-    murs_grd_salle.append(Obstacle([[x0+0.1,y0],[x0+0.1,y0+0.8]]))
-    murs_grd_salle.append(Obstacle([[x0+5.9,y0+5.8],[x0+5.9,y0+5.6]]))
-    
-    #simulation des portes
-    porte = Porte([x0+0.1,y0-1], [x0+0.1+largeur_porte,y0-1])
-    return murs_grd_salle, [porte]
-
-
-
-def Salle_233_235_porte_droite(x0,y0,largeur_porte):
-    #on considère que seule la porte droite de la salle est ouverte
-    murs_grd_salle = []
-    murs_grd_salle.append(Obstacle([[x0,y0],[x0+0.1+largeur_porte+5.8,y0]]))
-
-    murs_grd_salle.append(Obstacle([[x0+0.1+5.8+2*largeur_porte,y0],[x0+0.1+5.8+2*largeur_porte+4.2,y0]]))
-    murs_grd_salle.append(Obstacle([[x0+0.1+5.8+2*largeur_porte+4.2,y0],[x0+0.1+5.8+2*largeur_porte+4.2,y0+5.8]]))
-    murs_grd_salle.append(Obstacle([[x0,y0],[x0,y0+5.8]]))
-    murs_grd_salle.append(Obstacle([[x0,y0+5.8],[x0+0.1+5.8+2*largeur_porte+4.2,y0+5.8]]))
-    murs_grd_salle.append(Obstacle([[x0+0.1+largeur_porte+5.8,y0],[x0+0.1+largeur_porte+5.8,y0+0.8]]))
-    murs_grd_salle.append(Obstacle([[x0+5.9,y0+5.8],[x0+5.9,y0+5.6]]))
-    
-    #simulation des portes
-    porte = Porte([x0+0.1+largeur_porte+5.8,y0-1], [x0+0.1+5.8+2*largeur_porte,y0-1])
-    return murs_grd_salle, [porte]
-
+    return murs_grd_salle, Portes
 
 
 def tables_salle_233_235(x0,y0,largeur_porte,espace_x_porte,espace_x,espace_y,largeur_bureau,longueur_bureau):
@@ -162,6 +142,9 @@ def Salle_233_235_occupation(x0,y0,largeur_porte,espace_x_porte,espace_x,espace_
             eleve = Agent(np.array([x,y + espace_agent_table]), 1., sigma, epsilon*2, 'eleve')
             eleves.append(eleve)
     return eleves
+
+
+
 
 
 #==============================================================================

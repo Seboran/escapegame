@@ -157,8 +157,10 @@ espace_y = 1.1 #espace qui separe dans la direction y deux tables
 largeur_bureau_Gs = 0.5
 longueur_bureau_Gs = 1.25
 
+portes_ouvertes = [1,2]
+
 #simulation de la salle
-Gd_salle_2_portes = Salle_233_235_deux_portes(x0,y0,largeur_porte_Gs) #les portes sont préenregistrées dans cette fonction
+Gd_salle_2_portes = Salle_233_235(x0,y0,largeur_porte_Gs,portes_ouvertes) #les portes sont préenregistrées dans cette fonction
 Portes_Gs = Gd_salle_2_portes[1] #on récupère les portes
 Gd_salle_2_portes = Gd_salle_2_portes[0]
 #ajout des tables dans la salle
