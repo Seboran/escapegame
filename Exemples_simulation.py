@@ -35,10 +35,26 @@ portes_ouvertes = [1,2,3,4]
 occupation_ligne = range(nbr_rangees) 
 occupation_colonne = range(16) 
 
+#================================================================================
+#simulation 2 : 4 demi-portes ouvertes - moitié amphi rempli (3 premières lignes)
+#=================================================================================
+portes_ouvertes = [1,2,3,4] #demi-portes ouvertes numérotées de gauche à droite de 1 à 4
+occupation_ligne = [0,1,2] #vecteur indiquant dans quelle ligne ligne de table on veut mettre des élèves (de 0 à nbr_rangées)
+occupation_colonne = range(16) #vecteur indiquant dans à quelle position d'une grande table on veut mettre des élèves (de 0 à 16)
+
+#================================================================================
+#simulation 3 : 4 demi-portes ouvertes - moitié amphi rempli (3 dernières lignes)
+#=================================================================================
+portes_ouvertes = [1,2,3,4] #demi-portes ouvertes numérotées de gauche à droite de 1 à 4
+occupation_ligne = [3,4,5] #vecteur indiquant dans quelle ligne ligne de table on veut mettre des élèves (de 0 à nbr_rangées)
+occupation_colonne = range(16) #vecteur indiquant dans à quelle position d'une grande table on veut mettre des élèves (de 0 à 16)
+
+
+#============================================================
+#Simulation amphi - partie invariable
+#============================================================
 murs_amphi = Amphi(x0,y0,largeur_porte,portes_ouvertes)
 portes_amphi = murs_amphi[1]
 murs_amphi = murs_amphi[0]
 tables_amphi = table_amphi(x0,y0,espace_x,espace_y,nbr_rangees,largeur_table,longueur_table,espace_table)
 eleves_amphi = amphi_occupation(x0,y0,espace_x,espace_y,longueur_table,largeur_table,espace_table_eleve,espace_table,occupation_colonne,occupation_ligne,sigma,epsilon)
-obstacles = murs_amphi + tables_amphi
-salleTest = Environnement(x0+15, y0+10, Nx, Ny, dt, obstacles, eleves_amphi, portes_amphi)
