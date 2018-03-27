@@ -173,10 +173,10 @@ if __name__ == '__main__':
 
     i = 0
     filename = "agents_positions.csv"
-    while os.path.exists("donnees_brutes/" + filename):
+    while os.path.exists("data/" + filename):
         filename = "agents_positions_" + str(i) + ".csv"
         i += 1
-    with open("donnees_brutes/" + filename, 'w') as csvfile:
+    with open("data/" + filename, 'w') as csvfile:
         spamwriter = csv.writer(csvfile, lineterminator = '\n')
         for agents_n in agents_positions:
             for number, pos, t in agents_n:
@@ -190,5 +190,5 @@ if __name__ == '__main__':
     results = read_csv(filename, Lx, Ly)
     print(len(results))
     ani = animate("Titre", salleTest, results, figure, axe, len(results), dt)
-    ani.save("animations_mp4/" + filename + ".mp4")
+    ani.save("media/" + filename + ".mp4")
     plt.show()
