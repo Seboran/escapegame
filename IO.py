@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import matplotlib.pylab as plt
 import matplotlib.animation as animation
 from collections import defaultdict
@@ -9,7 +11,7 @@ def parsing():
     parser = argparse.ArgumentParser(description='Escape game') 
     """parser.add_argument('obstacles', help='name of obstacles file', type=str)
     parser.add_argument('agents', help='name of starting agents file', type=str)"""
-    parser.add_argument('-T', help='number of CPUs', type=float, default=10.)
+    parser.add_argument('-T', help='durée de la simulation', type=float, default=10.)
     parser.add_argument('-dt', help='size of dt', type=float, default=0.01)
     parser.add_argument('-Lx', help='size of room Lx', type=float, default=10.)
     parser.add_argument('-Ly', help='size of room Ly', type=float, default=10.)
