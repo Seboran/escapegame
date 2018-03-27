@@ -20,8 +20,7 @@ import numpy as np
 import matplotlib.pylab as plt
 import matplotlib.animation as animation
 
-import csv
-import os
+
 from enviro_escape import *
 from IO import *
 
@@ -169,26 +168,9 @@ if __name__ == '__main__':
     #salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
 
     agents_positions = list(salleTest.maj_turns(nombreT))
-
-
-    i = 0
-    filename = "agents_positions.csv"
-    while os.path.exists("data/" + filename):
-        filename = "agents_positions_" + str(i) + ".csv"
-        i += 1
-    with open("data/" + filename, 'w') as csvfile:
-        spamwriter = csv.writer(csvfile, lineterminator = '\n')
-        for agents_n in agents_positions:
-            for number, pos, t in agents_n:
-                #print(number, pos, t)
-                x, y = pos
-                spamwriter.writerow(list(number)+ [x, y, t])
     
 
-    figure, axe = plt.subplots(1, 1)
+    sauvegarde("salleTest", salleTest, agents_positions, dt)
 
-    results = read_csv(filename, Lx, Ly)
-    print(len(results))
-    ani = animate("Titre", salleTest, results, figure, axe, len(results), dt)
-    ani.save("media/" + filename + ".mp4")
-    plt.show()
+    agents_positions_grande_salle_Test = list(grande_salleTest.maj_turns(nombreT))
+    sauvegarde("233-235", grande_salleTest, agents_positions_grande_salle_Test, dt)

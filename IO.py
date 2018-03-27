@@ -6,6 +6,15 @@ from collections import defaultdict
 import csv
 import argparse
 
+import os
+
+try:
+    from tqdm import tqdm as progress
+except:
+    print("Please install tqdm for loading bar display")
+    def progress(range):
+        return range
+
 def parsing():
 
     parser = argparse.ArgumentParser(description='Escape game') 
@@ -43,7 +52,7 @@ def animate(title, salleTest, results, fig, axe, Nt, dt):
     Due to matplotlib limitations there are some trickled down technics to
     display a legend inside the code '''
     # Updates the screen
-    def update(k):
+    def update(k, progress_bar):
         xs = []
         ys = []
         colors = []
@@ -60,10 +69,11 @@ def animate(title, salleTest, results, fig, axe, Nt, dt):
             colors.append(color)
         #print(xs)
         axe.scatter(xs, ys, c = colors)
+        progress_bar.update(k)
         
         
 
-    
+    progress_bar = progress(range(Nt), desc = "Export vidéo")
         
     ''' Figure initialisation '''
     
@@ -72,12 +82,34 @@ def animate(title, salleTest, results, fig, axe, Nt, dt):
     
 
     
-    ani = animation.FuncAnimation(fig, update, frames = Nt, interval = dt * 1000, blit = False, repeat = True)
+    ani = animation.FuncAnimation(fig, update, fargs = (progress_bar,), frames = Nt, interval = dt * 1000, blit = False, repeat = True)
 
     
     return ani
 
+def sauvegarde(name_export, salleTest, agents_positions, dt):
+    i = 0
+    filename = name_export + ".csv"
+    while os.path.exists("data/" + filename):
+        filename =  name_export + "_" + str(i) + ".csv"
+        i += 1
+    with open("data/" + filename, 'w') as csvfile:
+        spamwriter = csv.writer(csvfile, lineterminator = '\n')
+        for agents_n in agents_positions:
+            for number, pos, t in agents_n:
+                #print(number, pos, t)
+                x, y = pos
+                spamwriter.writerow(list(number)+ [x, y, t])
+    
 
+    figure, axe = plt.subplots(1, 1)
+    Lx = salleTest.Lx
+    Ly = salleTest.Ly
+    results = read_csv("data/" + filename, Lx, Ly)
+    print(len(results))
+    ani = animate("Titre", salleTest, results, figure, axe, len(results), dt)
+    ani.save("media/" + filename[:-4] + ".mp4") # Removes 4 lasts chars
+    plt.show()
 
 
 

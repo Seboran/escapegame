@@ -4,3 +4,6 @@ __pycache__/IO.cpython-35.pyc
 __pycache__/programmePrincipal.cpython-35.pyc
 agents_positions*.mp4
 __pycache__/*
+data/salleTest*.csv
+
+media/salleTest*.mp4
