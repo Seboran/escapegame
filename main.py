@@ -49,13 +49,10 @@ if __name__ == '__main__':
     nombreT = int(T / dt)
 
 
+
     sigma = 0.1
     epsilon = 1.0
 
- 
-
-    # Murs d'exemple
-    largeur_porte = 2 * 0.90
     #==============================================================================
     """Modification de la simulation de l'amphi, voir le fichier de fonctions simulation_salles et le fichier texte qui donne quelques simulations possibles
     (en cours d'écriture)"""
@@ -69,7 +66,6 @@ if __name__ == '__main__':
     #murs.append(Obstacle([[largeur_porte,4], [largeur_porte,3]]))
     #murs.append(Obstacle([[13.52 - largeur_porte, 4], [13.52 - largeur_porte,3]]))
     #
-    #
     #murs.append(Obstacle([[13.52, 3 + 1], [13.52 - 0.25, 3 + 1]]))
     #murs.append(Obstacle([[13.52 - 0.25, 3 + 1], [13.52 - 0.25, 3]]))
     #murs.append(Obstacle([[13.52, 3], [13.52 - 0.25, 3]]))
@@ -77,10 +73,7 @@ if __name__ == '__main__':
     #murs.append(Obstacle([[0, 3 + 1], [0 + 0.25, 3 + 1]]))
     #murs.append(Obstacle([[0 + 0.25, 3 + 1], [0 + 0.25, 3]]))
     #murs.append(Obstacle([[0, 3], [0 + 0.25, 3]]))
-    # 
-    #
-    #
-    #    
+    #     
     #tables = []
     #eleves = []
     #for i in range(5):
@@ -88,37 +81,29 @@ if __name__ == '__main__':
     #    for j in range(16):
     #        eleve = Agent(np.array([2 + j * 0.6,6.1 + i]), 1., sigma, epsilon*2)
     #        eleves.append(eleve)
-    #    
-    #
-    #
-    #
+
     #obstacles = murs + tables
     #==============================================================================
-
 
     #porte1 = Porte([0,1.25], [2,1.25])
     #porte2 = Porte([11.5,1.25], [13.5,1.25])
     #
-    #
     #agents = eleves
-    #
-    #    
+    #   
     #portes = [porte1, porte2]
     #obstacles=build_walls(Lx,Ly,portes)
 
-            
 
     #==============================================================================
     # Simulation possible de l'amphi
     #==============================================================================
     #variables générales utiles à la simulation
     #position de la pièce de l'angle en bas à gauche dans la fenêtre d'affichage
-    x0 = 1.0 #décalage en x
-    y0 = 3.0 #dacalage en y
-
+    x0 = 1.0 
+    y0 = 3.0 
+    largeur_porte = 0.80 #largeur d'une petite porte ou d'une demi-porte d'amphi
 
     #variables spécifiques à l'amphi
-    largeur_porte = 0.80 #on met la largeur de la demi-porte
     espace_x = 1.9 #esapce entre le mur de l'amphi et le bord gauche des tables 
     espace_y = 2.3 #esapce entre le mur de l'amphi et le bord inférieur des tables
     largeur_table = 0.3 #largueur des tables dans l'amphi
@@ -128,10 +113,11 @@ if __name__ == '__main__':
     espace_table_eleve = 0.19 #espace entre le bord de la table et l'élève
 
 
+    """Partie à modifier pour les différentes simulations """
     portes_ouvertes = [1,2,3,4] #demi-portes ouvertes numérotées de gauche à droite de 1 à 4
     occupation_ligne = [0] #vecteur indiquant dans quelle ligne ligne de table on veut mettre des élèves (de 0 à nbr_rangées)
     occupation_colonne = [3] #vecteur indiquant dans à quelle position d'une grande table on veut mettre des élèves (de 0 à 16)
-
+    """ """
 
     murs_amphi = Amphi(x0,y0,largeur_porte,portes_ouvertes)
     portes_amphi = murs_amphi[1]
@@ -140,40 +126,43 @@ if __name__ == '__main__':
     eleves_amphi = amphi_occupation(x0,y0,espace_x,espace_y,longueur_table,largeur_table,espace_table_eleve,espace_table,occupation_colonne,occupation_ligne,
                         sigma,epsilon)
 
-        
-    
+    prof = Agent(np.array([x0 + 6.7,y0+0.6]), 1., sigma, epsilon*2, 'prof') 
+    eleves_amphi.append(prof)
+
     obstacles = murs_amphi + tables_amphi
 
     salleTest = Environnement(x0+15, y0+10, Nx, Ny, dt, obstacles, eleves_amphi, portes_amphi)
 
 
-
     #==============================================================================
-    #Simulation de la Grande salle 233/235 (Gs)
+    #Simulation possible de la grande salle 233/235
     #==============================================================================
-    largeur_porte_Gs = 0.8
-    x0 = 1.0 #donne le décalage en x par rapport au bord de la fenêtre
-    y0 = 3.0  #donne le décalage en y par rapport au bord de la fenêtre
+    #variables spécifiques à la salle
     espace_x_porte = 0.7 #espace entre la première porte et la première table
     espace_x = 0.85 #espace qui separe dans la direction x deux tables
     espace_y = 1.1 #espace qui separe dans la direction y deux tables
     largeur_bureau_Gs = 0.5
     longueur_bureau_Gs = 1.25
+    espace_agent_table = 0.17 #distance entre le bord de la table et l'élève
+
+    """Partie à modifier pour les différentes simulations """
+    portes_ouvertes = [1,2]
+    partie_gauche = [1,2,3,4]
+    partie_droite = [1,2,3]
+    """ """
 
     #simulation de la salle
-    Gd_salle_2_portes = Salle_233_235_deux_portes(x0,y0,largeur_porte_Gs) #les portes sont préenregistrées dans cette fonction
+    Gd_salle_2_portes = Salle_233_235(x0,y0,largeur_porte,portes_ouvertes) 
     Portes_Gs = Gd_salle_2_portes[1] #on récupère les portes
     Gd_salle_2_portes = Gd_salle_2_portes[0]
-    #ajout des tables dans la salle
-    Gd_salle_tables = tables_salle_233_235(x0,y0,largeur_porte_Gs,espace_x_porte,espace_x,espace_y,largeur_bureau_Gs,longueur_bureau_Gs)
+
+    Gd_salle_tables = tables_salle_233_235(x0,y0,largeur_porte,espace_x_porte,espace_x,espace_y,largeur_bureau_Gs,longueur_bureau_Gs)
     Obstacles_Gd_salle = Gd_salle_2_portes + Gd_salle_tables
-    #ajout des agents
-    espace_agent_table = 0.17 #distance entre le bord de la table et l'élève
-    rangs_gauche = [1,2,3,4]
-    rangs_droite = [1,2,3]
-    eleves_Gs = Salle_233_235_occupation(x0,y0,largeur_porte_Gs,espace_x_porte,espace_x,espace_y,largeur_bureau_Gs,
-                                    longueur_bureau_Gs,espace_agent_table,rangs_gauche,rangs_droite,sigma,epsilon)
-    grande_salleTest = Environnement(14,10,Nx,Ny,dt,Obstacles_Gd_salle,eleves_Gs,Portes_Gs)
+
+    eleves_Gs = Salle_233_235_occupation(x0,y0,largeur_porte,espace_x_porte,espace_x,espace_y,largeur_bureau_Gs,
+                                    longueur_bureau_Gs,espace_agent_table,partie_gauche,partie_droite,sigma,epsilon)
+
+    grande_salleTest = Environnement(x0+14,y0+6,Nx,Ny,dt,Obstacles_Gd_salle,eleves_Gs,Portes_Gs)
     #==============================================================================
 
 
