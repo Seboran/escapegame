@@ -168,10 +168,11 @@ if __name__ == '__main__':
 
     #salleTest = Environnement(Lx, Ly, Nx, Ny, dt, obstacles, agents, portes)
 
+    agents_positions_grande_salle_Test = list(grande_salleTest.maj_turns(nombreT))
+    sauvegarde("233-235", grande_salleTest, agents_positions_grande_salle_Test, dt)
     agents_positions = list(salleTest.maj_turns(nombreT))
     
 
     sauvegarde("salleTest", salleTest, agents_positions, dt)
 
-    agents_positions_grande_salle_Test = list(grande_salleTest.maj_turns(nombreT))
-    sauvegarde("233-235", grande_salleTest, agents_positions_grande_salle_Test, dt)
+    
