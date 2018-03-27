@@ -6,6 +6,8 @@ from collections import defaultdict
 import csv
 import argparse
 
+import os
+
 def parsing():
 
     parser = argparse.ArgumentParser(description='Escape game') 
@@ -77,7 +79,29 @@ def animate(title, salleTest, results, fig, axe, Nt, dt):
     
     return ani
 
+def sauvegarde(name_export, salleTest, agents_positions, dt):
+    i = 0
+    filename = name_export + ".csv"
+    while os.path.exists("data/" + filename):
+        filename =  name_export + str(i) + ".csv"
+        i += 1
+    with open("data/" + filename, 'w') as csvfile:
+        spamwriter = csv.writer(csvfile, lineterminator = '\n')
+        for agents_n in agents_positions:
+            for number, pos, t in agents_n:
+                #print(number, pos, t)
+                x, y = pos
+                spamwriter.writerow(list(number)+ [x, y, t])
+    
 
+    figure, axe = plt.subplots(1, 1)
+    Lx = salleTest.Lx
+    Ly = salleTest.Ly
+    results = read_csv(filename, Lx, Ly)
+    print(len(results))
+    ani = animate("Titre", salleTest, results, figure, axe, len(results), dt)
+    ani.save("media/" + filename[:-4] + ".mp4") # Removes 4 lasts chars
+    plt.show()
 
 
 
