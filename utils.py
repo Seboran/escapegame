@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # compatibility
 from __future__ import division
 from __future__ import print_function
