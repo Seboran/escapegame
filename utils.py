@@ -13,14 +13,13 @@ import numpy as np
 import matplotlib.pylab as plt
 import matplotlib.animation as animation
 
+
 try:
     from tqdm import tqdm as progress
 except:
     print("Please install tqdm for loading bar display")
     def progress(range):
         return range
-
-
 
 
 def meter_to_int(x, N, L):
@@ -86,9 +85,7 @@ def points_list(sommet_1, sommet_2):
 def bfs(Nx, Ny, grid, start, goal):
     ''' Prend des coordonnés cases sans unités
     Ne pas mettre de floats ou de mètres'''
-    queue = collections.deque([[start]])
-    
-    
+    queue = collections.deque([[start]])    
     
     grid_seen = np.zeros([Nx, Ny])
     
