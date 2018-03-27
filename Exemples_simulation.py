@@ -27,10 +27,12 @@ espace_table = 0.6 #esapce entre deux tables dans l'amphi (on considère que les
 nbr_rangees = 6 #nombre de rangées de tables dans l'amphi
 espace_table_eleve = 0.19 #espace entre le bord de la table et l'élève
 
+
 #==========================================================
 #simulation 1 : 4 demi-portes ouvertes - occupation totale
 #==========================================================
-portes_ouvertes = [1,2,3,4] 
+
+portes_ouvertes = [1,2,3,4]
 occupation_ligne = range(nbr_rangees) 
 occupation_colonne = range(16) 
 #==============================================================================

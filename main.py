@@ -103,8 +103,8 @@ if __name__ == '__main__':
     largeur_porte = 0.80 #largeur d'une petite porte ou d'une demi-porte d'amphi
 
     #variables spécifiques à l'amphi
-    espace_x = 1.9 #esapce entre le mur de l'amphi et le bord gauche des tables 
-    espace_y = 2.3 #esapce entre le mur de l'amphi et le bord inférieur des tables
+    espace_x = 1.9 #espace entre le mur de l'amphi et le bord gauche des tables 
+    espace_y = 2.3 #espace entre le mur de l'amphi et le bord inférieur des tables
     largeur_table = 0.3 #largueur des tables dans l'amphi
     longueur_table = 9.95 #longueur des tables de l'amphi
     espace_table = 0.6 #esapce entre deux tables dans l'amphi (on considère que les tables sont equidistantes)
@@ -113,9 +113,10 @@ if __name__ == '__main__':
 
 
     """Partie à modifier pour les différentes simulations """
-    portes_ouvertes = [1,2,3,4] #demi-portes ouvertes numérotées de gauche à droite de 1 à 4
-    occupation_ligne = [0] #vecteur indiquant dans quelle ligne ligne de table on veut mettre des élèves (de 0 à nbr_rangées)
-    occupation_colonne = [3] #vecteur indiquant dans à quelle position d'une grande table on veut mettre des élèves (de 0 à 16)
+    
+    portes_ouvertes = [1,2]
+    occupation_ligne = [0,1,2,3,4,5] 
+    occupation_colonne = range(16)
     """ """
 
     murs_amphi = Amphi(x0,y0,largeur_porte,portes_ouvertes)
